@@ -1,0 +1,16 @@
+<Context>
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+    <WatchedResource>WEB-INF/tomcat-web.xml</WatchedResource>
+    <WatchedResource>${catalina.base}/web.xml</WatchedResource>
+
+    <Resource 
+            name="jdbc/database"
+            auth="Container"
+            type="javax.sql.DataSource"
+            maxActive="100"
+            maxWait="10000"
+            driverClassName="org.postgresql.Driver"
+            url="jdbc:postgresql://localhost:5432/ers"
+            username="postgres"
+            password="vedzic-mekDi1-wepwuc"/>
+</Context>
