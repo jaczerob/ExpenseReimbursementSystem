@@ -11,8 +11,8 @@ import com.github.jaczerob.project1.repositories.UserRepository;
 /**
  * Represents the user service bridge to the repository
  * @author Jacob
- * @version 0.1
  * @since 0.2
+ * @version 0.3
  */
 public class UserService {
     private UserRepository userRepository;

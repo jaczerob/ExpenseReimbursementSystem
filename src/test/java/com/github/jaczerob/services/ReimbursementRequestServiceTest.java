@@ -106,4 +106,20 @@ public class ReimbursementRequestServiceTest {
         Mockito.when(this.reimbursementRequestRepository.getAllFromStatus(false)).thenReturn(reimbursementRequests);
         Assert.assertEquals(reimbursementRequests, this.reimbursementRequestService.getAllResolvedReimbursements());
     }
+
+    @Test
+    public void testGetAllFromEmployeeSuccess() {
+        List<ReimbursementRequest> reimbursementRequests = new ArrayList<ReimbursementRequest>() {
+            {
+                add(Mockito.mock(PendingReimbursementRequest.class));
+                add(Mockito.mock(PendingReimbursementRequest.class));
+                add(Mockito.mock(ResolvedReimbursementRequest.class));
+                add(Mockito.mock(ResolvedReimbursementRequest.class));
+                add(Mockito.mock(ResolvedReimbursementRequest.class));
+            }
+        };
+
+        Mockito.when(this.reimbursementRequestRepository.getAllFromEmployee(1)).thenReturn(reimbursementRequests);
+        Assert.assertEquals(reimbursementRequests, this.reimbursementRequestService.getAllEmployeeReimbursements(1));
+    }
 }

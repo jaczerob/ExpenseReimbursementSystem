@@ -5,8 +5,8 @@ import com.github.jaczerob.project1.models.ERSObject;
 /**
  * Represents a user
  * @author Jacob
- * @version 0.1
  * @since 0.1
+ * @version 0.3
  */
 public abstract class User extends ERSObject {
     protected String email;

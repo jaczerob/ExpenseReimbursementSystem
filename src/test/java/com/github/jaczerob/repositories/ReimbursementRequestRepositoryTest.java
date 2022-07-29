@@ -193,4 +193,29 @@ public class ReimbursementRequestRepositoryTest {
         List<ReimbursementRequest> gotRequests = this.reimbursementRequestRepository.getAllFromStatus(true);
         Assert.assertEquals(requests, gotRequests);
     }
+
+    @Test
+    public void testGetAllFromEmployeeSuccess() throws SQLException {
+        List<ReimbursementRequest> requests = new ArrayList<>();
+        Connection conn = this.dataSource.getConnection();
+        String sql = "INSERT INTO reimbursement_requests (reimbursement_request_employee_id, reimbursement_request_amount, reimbursement_request_type, reimbursement_request_pending, reimbursement_request_approved, reimbursement_request_manager_id) VALUES (?, ?, ?, ?, ?, ?);";
+        PendingReimbursementRequest request;
+
+        for (int i = 1; i <= 5; i++) {
+            request = new PendingReimbursementRequest(i, 1, 1f, "money");
+            requests.add(request);
+            
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, request.getEmployeeID());
+            ps.setFloat(2, request.getAmount());
+            ps.setString(3, request.getType());
+            ps.setBoolean(4, true);
+            ps.setBoolean(5, false);
+            ps.setNull(6, Types.INTEGER);
+            ps.executeUpdate();
+        }
+
+        List<ReimbursementRequest> gotRequests = this.reimbursementRequestRepository.getAllFromEmployee(1);
+        Assert.assertEquals(requests, gotRequests);
+    }
 }

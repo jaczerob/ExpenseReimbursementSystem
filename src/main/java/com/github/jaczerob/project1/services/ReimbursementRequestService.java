@@ -13,8 +13,8 @@ import com.github.jaczerob.project1.models.users.Manager;
 /**
  * Represents the reimbursement request service bridge to the repository
  * @author Jacob
- * @version 0.2
  * @since 0.2
+ * @version 0.3
  */
 public class ReimbursementRequestService {
     private ReimbursementRequestRepository reimbursementRequestRepository;
@@ -82,5 +82,15 @@ public class ReimbursementRequestService {
      */
     public List<ReimbursementRequest> getAllResolvedReimbursements() {
         return this.reimbursementRequestRepository.getAllFromStatus(false);
+    }
+
+    /**
+     * Gets all reimbursement requests from an employee
+     * @return The list of resolved reimbursement requests 
+     * @throws IllegalArgumentException If the ID is less than 0
+     */
+    public List<ReimbursementRequest> getAllEmployeeReimbursements(int employeeID) throws IllegalArgumentException {
+        if (employeeID < 0) throw new IllegalArgumentException("Invalid id");
+        return this.reimbursementRequestRepository.getAllFromEmployee(employeeID);
     }
 }

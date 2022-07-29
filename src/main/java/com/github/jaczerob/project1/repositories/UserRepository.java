@@ -23,8 +23,8 @@ import com.github.jaczerob.project1.models.users.User;
 /**
  * Represents a repository interface for accessing and managing users
  * @author Jacob
- * @version 0.1
- * @since 0.2
+ * @since 0.1
+ * @version 0.3
  */
 public class UserRepository implements IRepository<User, String> {
     private static Logger logger = LogManager.getLogger(UserRepository.class);

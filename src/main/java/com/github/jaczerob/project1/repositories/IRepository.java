@@ -9,8 +9,8 @@ import com.github.jaczerob.project1.models.ERSObject;
 /**
  * Represents a repository interface
  * @author Jacob
- * @version 0.1
- * @since 0.2
+ * @since 0.1
+ * @version 0.3
  */
 public interface IRepository<T extends ERSObject, U> {
     /**

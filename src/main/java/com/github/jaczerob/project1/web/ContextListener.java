@@ -8,12 +8,13 @@ import javax.sql.DataSource;
 import com.github.jaczerob.project1.repositories.ReimbursementRequestRepository;
 import com.github.jaczerob.project1.repositories.UserRepository;
 import com.github.jaczerob.project1.services.ReimbursementRequestService;
+import com.github.jaczerob.project1.services.UserService;
 
 /**
  * Represents the context listener for the servlets
  * @author Jacob
- * @version 0.1
  * @since 0.2
+ * @version 0.3
  */
 public class ContextListener implements ServletContextListener {
     @Resource(name="jdbc/database")
@@ -22,7 +23,8 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         UserRepository userRepository = new UserRepository(dataSource);
-        servletContextEvent.getServletContext().setAttribute("userRepository", userRepository);
+        UserService userService = new UserService(userRepository);
+        servletContextEvent.getServletContext().setAttribute("userService", userService);
 
         ReimbursementRequestRepository reimbursementRequestRepository = new ReimbursementRequestRepository(dataSource);
         ReimbursementRequestService reimbursementRequestService = new ReimbursementRequestService(reimbursementRequestRepository);

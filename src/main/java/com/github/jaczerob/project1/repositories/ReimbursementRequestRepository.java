@@ -22,8 +22,8 @@ import com.github.jaczerob.project1.models.requests.ResolvedReimbursementRequest
 /**
  * Represents a repository interface for accessing and managing reimbursement requests
  * @author Jacob
- * @version 0.1
- * @since 0.2
+ * @since 0.1
+ * @version 0.3
  */
 public class ReimbursementRequestRepository implements IRepository<ReimbursementRequest, Integer> {
     private static Logger logger = LogManager.getLogger(ReimbursementRequestRepository.class);
@@ -151,6 +151,47 @@ public class ReimbursementRequestRepository implements IRepository<Reimbursement
                 type = rs.getString("reimbursement_request_type");
 
                 reimbursementRequests.add(new PendingReimbursementRequest(requestID, employeeID, amount, type));
+            }
+        } catch (SQLException exc) {
+            logger.warn("error with reimbursement_requests update request", exc);
+        }
+
+        return reimbursementRequests;
+    }
+
+    /**
+     * Gets all reimbursement requests from an employee
+     * @param employeeID The employee's ID
+     * @return A list of reimbursement requests from the employee
+     */
+    public List<ReimbursementRequest> getAllFromEmployee(int employeeID) {
+        List<ReimbursementRequest> reimbursementRequests = new ArrayList<>();
+        String sql = "SELECT * FROM reimbursement_requests WHERE reimbursement_request_employee_id = ?;";
+
+        try (
+            Connection conn = this.dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)
+        ) {
+            ps.setInt(1, employeeID);
+            ps.execute();
+            
+            ResultSet rs = ps.getResultSet();
+            
+            int requestID, gotEmployeeID;
+            float amount;
+            String type;
+            
+            while (rs.next()) {
+                requestID = rs.getInt("reimbursement_request_id");
+                gotEmployeeID = rs.getInt("reimbursement_request_employee_id");
+                amount = rs.getInt("reimbursement_request_amount");
+                type = rs.getString("reimbursement_request_type");
+
+                if (rs.getBoolean("reimbursement_request_pending")) {
+                    reimbursementRequests.add(new ResolvedReimbursementRequest(requestID, gotEmployeeID, amount, type, rs.getBoolean("reimbursement_request_approved"), rs.getInt("reimbursement_request_manager_id")));
+                } else {
+                    reimbursementRequests.add(new PendingReimbursementRequest(requestID, gotEmployeeID, amount, type));
+                }
             }
         } catch (SQLException exc) {
             logger.warn("error with reimbursement_requests update request", exc);
