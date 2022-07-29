@@ -14,7 +14,6 @@ import javax.sql.DataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.jaczerob.project1.exceptions.ConnectionException;
 import com.github.jaczerob.project1.exceptions.RecordAlreadyExistsException;
 import com.github.jaczerob.project1.exceptions.RecordNotExistsException;
 import com.github.jaczerob.project1.models.users.Employee;
@@ -25,9 +24,9 @@ import com.github.jaczerob.project1.models.users.User;
  * Represents a repository interface for accessing and managing users
  * @author Jacob
  * @version 0.1
- * @since 0.1
+ * @since 0.2
  */
-public class UserRepository implements IRepository<User> {
+public class UserRepository implements IRepository<User, String> {
     private static Logger logger = LogManager.getLogger(UserRepository.class);
     
     private DataSource dataSource;
@@ -41,27 +40,27 @@ public class UserRepository implements IRepository<User> {
     }
 
     @Override
-    public Optional<User> get(int id) throws ConnectionException {
+    public Optional<User> get(String username) {
         User user = null;
-        String sql = "SELECT * FROM users WHERE user_id = ?;";
+        String sql = "SELECT * FROM users WHERE user_username = ?;";
 
         try (
             Connection conn = this.dataSource.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)
         ) {
-            ps.setInt(1, id);
+            ps.setString(1, username);
             
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int userID = rs.getInt("user_id");
                 String email = rs.getString("user_email");
-                String username = rs.getString("user_username");
+                String gotUsername = rs.getString("user_username");
                 String password = rs.getString("user_password");
                 
                 if (rs.getBoolean("user_is_manager")) {
-                    user = new Manager(userID, email, username, password);
+                    user = new Manager(userID, email, gotUsername, password);
                 } else {
-                    user = new Employee(id, email, username, password);
+                    user = new Employee(userID, email, gotUsername, password);
                 }
             }
         } catch (SQLException exc) {
@@ -72,7 +71,7 @@ public class UserRepository implements IRepository<User> {
     }
 
     @Override
-    public void update(User user) throws ConnectionException, RecordNotExistsException {
+    public void update(User user) throws RecordNotExistsException {
         String sql = "UPDATE USERS SET user_email = ?, user_password = ?, user_username = ? WHERE user_id = ?;";
 
         try (
@@ -92,7 +91,7 @@ public class UserRepository implements IRepository<User> {
     }
 
     @Override
-    public void insert(User user) throws ConnectionException, RecordAlreadyExistsException {
+    public void insert(User user) throws RecordAlreadyExistsException {
         String sql = "INSERT INTO users (user_email, user_username, user_password, user_is_manager) VALUES (?, ?, ?, ?);";
 
         try (
@@ -114,9 +113,8 @@ public class UserRepository implements IRepository<User> {
      * Returns all employees in the database
      * @return A list of all employees
      * @throws SQLException If an error occurs in the SQL statements
-     * @throws ConnectionException If there is an error in the database connection
      */
-    public List<Employee> getAllEmployees() throws ConnectionException {
+    public List<Employee> getAllEmployees() {
         List<Employee> users = new ArrayList<>();
 
         try (

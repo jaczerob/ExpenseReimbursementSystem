@@ -14,7 +14,6 @@ import javax.sql.DataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.jaczerob.project1.exceptions.ConnectionException;
 import com.github.jaczerob.project1.exceptions.RecordNotExistsException;
 import com.github.jaczerob.project1.models.requests.PendingReimbursementRequest;
 import com.github.jaczerob.project1.models.requests.ReimbursementRequest;
@@ -24,9 +23,9 @@ import com.github.jaczerob.project1.models.requests.ResolvedReimbursementRequest
  * Represents a repository interface for accessing and managing reimbursement requests
  * @author Jacob
  * @version 0.1
- * @since 0.1
+ * @since 0.2
  */
-public class ReimbursementRequestRepository implements IRepository<ReimbursementRequest> {
+public class ReimbursementRequestRepository implements IRepository<ReimbursementRequest, Integer> {
     private static Logger logger = LogManager.getLogger(ReimbursementRequestRepository.class);
     
     private DataSource dataSource;
@@ -40,7 +39,7 @@ public class ReimbursementRequestRepository implements IRepository<Reimbursement
     }
 
     @Override
-    public Optional<ReimbursementRequest> get(int id) throws ConnectionException {
+    public Optional<ReimbursementRequest> get(Integer id) {
         ReimbursementRequest reimbursementRequest = null;
         String sql = "SELECT * FROM reimbursement_requests WHERE reimbursement_request_id = ?;";
 
@@ -71,9 +70,9 @@ public class ReimbursementRequestRepository implements IRepository<Reimbursement
     }
 
     @Override
-    public void update(ReimbursementRequest reimbursementRequest) throws ConnectionException, RecordNotExistsException, RuntimeException {
+    public void update(ReimbursementRequest reimbursementRequest) throws RecordNotExistsException, IllegalArgumentException {
         if (!(reimbursementRequest instanceof ResolvedReimbursementRequest)) 
-            throw new RuntimeException("ReimbursementRequest must be ResolvedReimbursementRequest");
+            throw new IllegalArgumentException("ReimbursementRequest must be ResolvedReimbursementRequest");
 
         ResolvedReimbursementRequest request = (ResolvedReimbursementRequest) reimbursementRequest;
         String sql = "UPDATE reimbursement_requests SET reimbursement_request_pending = ?, reimbursement_request_approved = ?, reimbursement_request_manager_id = ? WHERE reimbursement_request_id = ?;";
@@ -99,9 +98,9 @@ public class ReimbursementRequestRepository implements IRepository<Reimbursement
     }
 
     @Override
-    public void insert(ReimbursementRequest reimbursementRequest) throws ConnectionException, RuntimeException {
+    public void insert(ReimbursementRequest reimbursementRequest) throws IllegalArgumentException {
         if (!(reimbursementRequest instanceof PendingReimbursementRequest)) 
-            throw new RuntimeException("ReimbursementRequest must be PendingReimbursementRequest");
+            throw new IllegalArgumentException("ReimbursementRequest must be PendingReimbursementRequest");
 
         PendingReimbursementRequest request = (PendingReimbursementRequest) reimbursementRequest;
         String sql = "INSERT INTO reimbursement_requests (reimbursement_request_employee_id, reimbursement_request_amount, reimbursement_request_type, reimbursement_request_pending, reimbursement_request_approved, reimbursement_request_manager_id) VALUES (?, ?, ?, ?, ?, ?);";
@@ -127,9 +126,8 @@ public class ReimbursementRequestRepository implements IRepository<Reimbursement
      * @param isPending Indicates whether the request is pending
      * @return A list of all pending reimbursement requests
      * @throws SQLException If an error occurs in the SQL statements
-     * @throws ConnectionException If there is an error in the database connection
      */
-    public List<ReimbursementRequest> getAllFromStatus(boolean isPending) throws ConnectionException {
+    public List<ReimbursementRequest> getAllFromStatus(boolean isPending) {
         List<ReimbursementRequest> reimbursementRequests = new ArrayList<>();
         String sql = "SELECT * FROM reimbursement_requests WHERE reimbursement_request_pending = ?;";
 

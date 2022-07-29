@@ -7,7 +7,14 @@ import javax.sql.DataSource;
 
 import com.github.jaczerob.project1.repositories.ReimbursementRequestRepository;
 import com.github.jaczerob.project1.repositories.UserRepository;
+import com.github.jaczerob.project1.services.ReimbursementRequestService;
 
+/**
+ * Represents the context listener for the servlets
+ * @author Jacob
+ * @version 0.1
+ * @since 0.2
+ */
 public class ContextListener implements ServletContextListener {
     @Resource(name="jdbc/database")
     private DataSource dataSource;
@@ -18,11 +25,10 @@ public class ContextListener implements ServletContextListener {
         servletContextEvent.getServletContext().setAttribute("userRepository", userRepository);
 
         ReimbursementRequestRepository reimbursementRequestRepository = new ReimbursementRequestRepository(dataSource);
-        servletContextEvent.getServletContext().setAttribute("reimbursementRequestRepository", reimbursementRequestRepository);
+        ReimbursementRequestService reimbursementRequestService = new ReimbursementRequestService(reimbursementRequestRepository);
+        servletContextEvent.getServletContext().setAttribute("reimbursementRequestService", reimbursementRequestService);
     }
 
     @Override
-    public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        System.out.println("Context Destroyed");
-    }
+    public void contextDestroyed(ServletContextEvent servletContextEvent) { }
 }

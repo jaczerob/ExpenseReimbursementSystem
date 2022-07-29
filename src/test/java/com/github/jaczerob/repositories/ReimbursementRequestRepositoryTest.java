@@ -17,7 +17,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.jaczerob.project1.exceptions.ConnectionException;
 import com.github.jaczerob.project1.exceptions.RecordAlreadyExistsException;
 import com.github.jaczerob.project1.exceptions.RecordNotExistsException;
 import com.github.jaczerob.project1.models.requests.PendingReimbursementRequest;
@@ -79,7 +78,7 @@ public class ReimbursementRequestRepositoryTest {
     }
     
     @Test
-    public void testGetSuccess() throws SQLException, ConnectionException {
+    public void testGetSuccess() throws SQLException {
         ReimbursementRequest request = new PendingReimbursementRequest(1, 1, 1f, "money");
         
         Connection conn = this.dataSource.getConnection();
@@ -99,7 +98,7 @@ public class ReimbursementRequestRepositoryTest {
     }
 
     @Test
-    public void testInsertSuccess() throws SQLException, ConnectionException, RecordAlreadyExistsException, RuntimeException {
+    public void testInsertSuccess() throws SQLException, RecordAlreadyExistsException, RuntimeException {
         ReimbursementRequest request = new PendingReimbursementRequest(1, 1, 1f, "money");
         this.reimbursementRequestRepository.insert(request);
 
@@ -123,13 +122,13 @@ public class ReimbursementRequestRepositoryTest {
     }
 
     @Test(expected=RuntimeException.class)
-    public void testInsertFail_whenTypeMismatch() throws SQLException, RuntimeException, ConnectionException, RecordAlreadyExistsException {
+    public void testInsertFail_whenTypeMismatch() throws SQLException, RuntimeException, RecordAlreadyExistsException {
         ReimbursementRequest request = new ResolvedReimbursementRequest(1, 1, 1f, "", false, 1);
         this.reimbursementRequestRepository.insert(request);
     }
 
     @Test
-    public void testUpdateSuccess() throws SQLException, ConnectionException, RecordNotExistsException, RuntimeException {
+    public void testUpdateSuccess() throws SQLException, RecordNotExistsException, RuntimeException {
         PendingReimbursementRequest request = new PendingReimbursementRequest(1, 1, 1f, "money");
         Connection conn = this.dataSource.getConnection();
 
@@ -165,13 +164,13 @@ public class ReimbursementRequestRepositoryTest {
     }
 
     @Test(expected=RuntimeException.class)
-    public void testUpdateFail_whenTypeMismatch() throws SQLException, ConnectionException, RecordNotExistsException, RuntimeException {
+    public void testUpdateFail_whenTypeMismatch() throws SQLException, RecordNotExistsException, RuntimeException {
         ReimbursementRequest request = new PendingReimbursementRequest(1, 1, 1f, "money");
         this.reimbursementRequestRepository.update(request);
     }
 
     @Test
-    public void testGetAllFromStatusSuccess() throws SQLException, ConnectionException {
+    public void testGetAllFromStatusSuccess() throws SQLException {
         List<ReimbursementRequest> requests = new ArrayList<>();
         Connection conn = this.dataSource.getConnection();
         String sql = "INSERT INTO reimbursement_requests (reimbursement_request_employee_id, reimbursement_request_amount, reimbursement_request_type, reimbursement_request_pending, reimbursement_request_approved, reimbursement_request_manager_id) VALUES (?, ?, ?, ?, ?, ?);";

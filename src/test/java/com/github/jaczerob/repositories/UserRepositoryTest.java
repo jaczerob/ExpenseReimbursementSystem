@@ -15,7 +15,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.jaczerob.project1.exceptions.ConnectionException;
 import com.github.jaczerob.project1.exceptions.RecordAlreadyExistsException;
 import com.github.jaczerob.project1.exceptions.RecordNotExistsException;
 import com.github.jaczerob.project1.models.users.Employee;
@@ -60,7 +59,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void testGetSuccess() throws SQLException, ConnectionException {
+    public void testGetSuccess() throws SQLException {
         User user = new Employee(1, "", "", "");
 
         Connection conn = this.dataSource.getConnection();
@@ -73,12 +72,12 @@ public class UserRepositoryTest {
         ps.setBoolean(4, false);
         ps.executeUpdate();
 
-        Optional<User> gotUser = this.userRepository.get(user.getID());
+        Optional<User> gotUser = this.userRepository.get(user.getUsername());
         Assert.assertEquals(user, gotUser.get());
     }
 
     @Test
-    public void testInsertSuccess() throws SQLException, ConnectionException, RecordAlreadyExistsException {
+    public void testInsertSuccess() throws SQLException, RecordAlreadyExistsException {
         User user = new Employee(1, "", "", "");
         this.userRepository.insert(user);
 
@@ -101,8 +100,15 @@ public class UserRepositoryTest {
         Assert.assertEquals(user, gotUser);
     }
 
+    @Test(expected=RecordAlreadyExistsException.class)
+    public void testInsertFail_whenDuplicateEntries() throws RecordAlreadyExistsException {
+        User user = new Employee(1, "", "", "");
+        this.userRepository.insert(user);
+        this.userRepository.insert(user);
+    }
+
     @Test
-    public void testUpdateSuccess() throws SQLException, ConnectionException, RecordNotExistsException {
+    public void testUpdateSuccess() throws SQLException, RecordNotExistsException {
         Employee user = new Employee(1, "", "", "");
 
         Connection conn = this.dataSource.getConnection();
@@ -136,7 +142,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void testGetAllEmployeesSuccess() throws SQLException, ConnectionException {
+    public void testGetAllEmployeesSuccess() throws SQLException {
         Connection conn = this.dataSource.getConnection();
         String sql = "INSERT INTO users (user_email, user_username, user_password, user_is_manager) VALUES (?, ?, ?, ?);";
         
