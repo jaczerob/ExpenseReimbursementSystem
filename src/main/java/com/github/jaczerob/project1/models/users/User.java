@@ -6,7 +6,7 @@ import com.github.jaczerob.project1.models.ERSObject;
  * Represents a user
  * @author Jacob
  * @since 0.1
- * @version 0.3
+ * @version 0.4
  */
 public abstract class User extends ERSObject {
     protected String email;
@@ -45,6 +45,9 @@ public abstract class User extends ERSObject {
             return false;
 
         User other = (User) obj;
-        return this.getID() == other.getID();
+        return this.getID() == other.getID() && 
+                this.getUsername().equals(other.getUsername()) &&
+                this.getEmail().equals(other.getEmail()) && 
+                this.getPassword().equals(other.getPassword());
     }
 }

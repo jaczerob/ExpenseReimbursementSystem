@@ -23,7 +23,7 @@ import com.github.jaczerob.project1.models.requests.ResolvedReimbursementRequest
  * Represents a repository interface for accessing and managing reimbursement requests
  * @author Jacob
  * @since 0.1
- * @version 0.3
+ * @version 0.4
  */
 public class ReimbursementRequestRepository implements IRepository<ReimbursementRequest, Integer> {
     private static Logger logger = LogManager.getLogger(ReimbursementRequestRepository.class);
@@ -81,16 +81,12 @@ public class ReimbursementRequestRepository implements IRepository<Reimbursement
             Connection conn = this.dataSource.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)
         ) {
-            conn.setAutoCommit(false);
-            
             ps.setBoolean(1, true);
             ps.setBoolean(2, request.getApproved());
             ps.setInt(3, request.getApprovedBy());
             ps.setInt(4, request.getID());
             
             int rows = ps.executeUpdate();
-            conn.commit();
-
             if (rows < 1) throw new RecordNotExistsException();
         } catch (SQLException exc) {
             logger.warn("error with reimbursement_requests get request", exc);

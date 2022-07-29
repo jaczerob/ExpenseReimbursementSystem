@@ -6,7 +6,7 @@ import com.github.jaczerob.project1.models.ERSObject;
  * Represents a reimbursement request
  * @author Jacob
  * @since 0.1
- * @version 0.3
+ * @version 0.4
  */
 public abstract class ReimbursementRequest extends ERSObject {
     private int employeeID;
@@ -44,6 +44,9 @@ public abstract class ReimbursementRequest extends ERSObject {
         if (!(obj instanceof ReimbursementRequest)) return false;
 
         ReimbursementRequest other = (ReimbursementRequest) obj;
-        return this.getID() == other.getID();
+        return this.getID() == other.getID() &&
+                this.getAmount() == other.getAmount() &&
+                this.getEmployeeID() == other.getEmployeeID() &&
+                this.getType().equals(other.getType());
     }
 }
