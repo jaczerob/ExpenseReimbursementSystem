@@ -3,8 +3,8 @@ package com.github.jaczerob.project1.exceptions;
 /**
  * The base exception class for all ERS exceptions
  * @author Jacob
- * @version 0.1
  * @since 0.1
+ * @version 0.3
  */
 public class ERSException extends Exception {
     /**

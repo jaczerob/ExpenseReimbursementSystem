@@ -3,8 +3,8 @@ package com.github.jaczerob.project1.models.requests;
 /**
  * Represents a resolved reimbursement request
  * @author Jacob
- * @version 0.1
  * @since 0.1
+ * @version 0.3
  */
 public class ResolvedReimbursementRequest extends ReimbursementRequest {
     private boolean approved;
