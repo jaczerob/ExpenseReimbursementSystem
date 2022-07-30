@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project1</a> &gt; <a href="index.source.html" class="el_package">com.github.jaczerob.project1.models.users</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package com.github.jaczerob.project1.models.users;
+
+import com.github.jaczerob.project1.models.ERSObject;
+
+/**
+ * Represents a user
+ * @author Jacob
+ * @since 0.1
+ * @version 0.7
+ */
+public abstract class User extends ERSObject {
+    protected String email;
+    protected String username;
+    protected String password;
+
+    /**
+     * The constructor for {@link User} and its subclasses
+     * @param id The ID of the user
+     * @param email The email of the user
+     * @param username The username of the user
+     * @param password The password of the user
+     */
+    public User(int id, String email, String username, String password) {
+<span class="fc" id="L24">        super(id);</span>
+<span class="fc" id="L25">        this.email = email;</span>
+<span class="fc" id="L26">        this.username = username;</span>
+<span class="fc" id="L27">        this.password = password;</span>
+<span class="fc" id="L28">    }</span>
+
+    public String getUsername() {
+<span class="fc" id="L31">        return this.username;</span>
+    }
+
+    public String getEmail() {
+<span class="fc" id="L35">        return this.email;</span>
+    }
+
+    public String getPassword() {
+<span class="fc" id="L39">        return this.password;</span>
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        if (!(obj instanceof User))</span>
+<span class="nc" id="L45">            return false;</span>
+
+<span class="fc" id="L47">        User other = (User) obj;</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        return this.getID() == other.getID() &amp;&amp; </span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">                this.getUsername().equals(other.getUsername()) &amp;&amp;</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">                this.getEmail().equals(other.getEmail()) &amp;&amp; </span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">                this.getPassword().equals(other.getPassword());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L56">        return String.format(&quot;User(id=%d, username=%s, email=%s)&quot;, this.getID(), this.getUsername(), this.getEmail());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

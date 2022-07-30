@@ -1,9 +1,12 @@
 <div align="center">
     <h1>Project 1: Expense Reimbursement System</h1>
-    <h2 align="center">User Stories</h2>
+    <h2>User Stories</h2>
 </div>
 
 ## Common
+### How to access the API
+The base URL for this project is http://localhost:8080/. To access logging in, for example, you will use http://localhost:8080/login.
+
 ### Login/Logout
 The way this is implemented is by making a POST request to `/login` with your username and password will check these fields against Users in the database and if there is a match, there will be a User (Employee or Manager depending on access) object attributed to the UserSession inside of Tomcat. This User object will be used to check access to the other endpoints in this program. When a `POST` request to `/logout` is called, the UserSession will be invalidated.
 
@@ -84,3 +87,35 @@ Managers can view all employees by making a GET request to `/employees`.
     - Not implemented
 - Employee management system
     - See [Employee Management System](#employee-management-system)
+
+<br>
+<h2 align="center">How to run</h2>
+
+## My VSCode Extensions
+- Community Service Connectors
+    - Deploying to and managing Tomcat
+- Extension Pack for Java
+    - Various extensions for easier Java development
+- Thunder Client
+    - Testing API endpoints
+- SQLTools and SQLTools PostgreSQL/Redshift Driver
+    - PostgreSQL database management
+- Coverage Gutters
+    - Unit test coverage per file
+
+## How to build and deploy to Tomcat
+- mvn package
+    - Creates an app.war under the target directory
+- Create and configure Tomcat server with Community Server Connector
+    - Under the Servers tab, right click Community Server Connector and click "Create New Server..."
+        - Create an Apache Tomcat 9.0.41 server. This version is important. Do not go over it.
+    - Under the Servers tab, right click the newly created server "apache-tomcat-9.0.41" and click "Add Deployment"
+        - Add the app.war under the target directory
+    - Right click the Tomcat server and click "Start Server"
+    - To configure, right click the Tomcat Server and click "Server Actions..." and click "Edit Configuration File..."
+    - After any re-build of the project, stop the Tomcat server, right click the Tomcat server, and click "Publish Server (Full)" to re-deploy the WAR file.
+- Test API endpoints with the Thunder Client extension
+- Configure database with the SQLTools extension
+- Check code coverage
+    - Run `mvn clean jacoco:prepare-agent install jacoco:report` to get coverage report
+    - To view coverage report, open `target/site/jacoco/index.html`.

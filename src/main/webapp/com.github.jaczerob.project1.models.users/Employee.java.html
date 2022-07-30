@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Employee.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project1</a> &gt; <a href="index.source.html" class="el_package">com.github.jaczerob.project1.models.users</a> &gt; <span class="el_source">Employee.java</span></div><h1>Employee.java</h1><pre class="source lang-java linenums">package com.github.jaczerob.project1.models.users;
+
+/**
+ * Represents an employee
+ * @author Jacob
+ * @since 0.1
+ * @version 0.3
+ */
+public class Employee extends User {
+    /**
+     * Creates an instance of {@link Employee}
+     * @param id The ID of the employee
+     * @param email The email of the employee
+     * @param username The username of the user
+     * @param password The password of the employee
+     */
+    public Employee(int id, String email, String username, String password) {
+<span class="fc" id="L18">        super(id, email, username, password);</span>
+<span class="fc" id="L19">    }</span>
+    
+    public void setEmail(String email) {
+<span class="fc" id="L22">        this.email = email;</span>
+<span class="fc" id="L23">    }</span>
+    
+    public void setUsername(String username) {
+<span class="nc" id="L26">        this.username = username;</span>
+<span class="nc" id="L27">    }</span>
+
+    public void setPassword(String password) {
+<span class="nc" id="L30">        this.password = password;</span>
+<span class="nc" id="L31">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

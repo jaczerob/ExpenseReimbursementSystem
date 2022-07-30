@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReimbursementRequestService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project1</a> &gt; <a href="index.source.html" class="el_package">com.github.jaczerob.project1.services</a> &gt; <span class="el_source">ReimbursementRequestService.java</span></div><h1>ReimbursementRequestService.java</h1><pre class="source lang-java linenums">package com.github.jaczerob.project1.services;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.github.jaczerob.project1.repositories.ReimbursementRequestRepository;
+import com.github.jaczerob.project1.exceptions.RecordNotExistsException;
+import com.github.jaczerob.project1.models.requests.PendingReimbursementRequest;
+import com.github.jaczerob.project1.models.requests.ReimbursementRequest;
+import com.github.jaczerob.project1.models.requests.ResolvedReimbursementRequest;
+import com.github.jaczerob.project1.models.users.Manager;
+
+/**
+ * Represents the reimbursement request service bridge to the repository
+ * @author Jacob
+ * @since 0.2
+ * @version 0.3
+ */
+public class ReimbursementRequestService {
+    private ReimbursementRequestRepository reimbursementRequestRepository;
+
+    /**
+     * Constructor for class {@link ReimbursementRequestService}
+     * @param reimbursementRequestRepository The repository to retrieve request data
+     */
+<span class="fc" id="L26">    public ReimbursementRequestService(ReimbursementRequestRepository reimbursementRequestRepository) {</span>
+<span class="fc" id="L27">        this.reimbursementRequestRepository = reimbursementRequestRepository;</span>
+<span class="fc" id="L28">    }</span>
+
+    /**
+     * Retrieves reimbursement request by id
+     * @param id The ID of the request
+     * @return The optional request
+     * @throws IllegalArgumentException If the ID is less than 0
+     */
+    public Optional&lt;ReimbursementRequest&gt; getReimbursementRequest(int id) throws IllegalArgumentException {
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        if (id &lt; 0) throw new IllegalArgumentException(&quot;Invalid id&quot;);</span>
+<span class="fc" id="L38">        return this.reimbursementRequestRepository.get(id);</span>
+    }
+
+    /**
+     * Resolved a pending reimbursement request
+     * @param request The request to resolve
+     * @param approved Whether the request is approved
+     * @param approvedBy The manager to resolve the request
+     * @throws RecordNotExistsException If the request is not found in the database
+     * @throws IllegalArgumentException If the request was submitted as not resolved or the request properties were invalid
+     */
+    public void resolveReimbursementRequest(PendingReimbursementRequest request, boolean approved, Manager approvedBy) throws RecordNotExistsException, IllegalArgumentException {
+<span class="fc" id="L50">        if (</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">            request.getID() &lt; 0 ||</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            request.getAmount() &lt; 1f</span>
+<span class="fc" id="L53">        ) throw new IllegalArgumentException(&quot;Invalid request properties&quot;);</span>
+<span class="fc" id="L54">        ResolvedReimbursementRequest resolved = new ResolvedReimbursementRequest(request, approved, approvedBy.getID());</span>
+<span class="fc" id="L55">        this.reimbursementRequestRepository.update(resolved);</span>
+<span class="fc" id="L56">    }</span>
+
+    /**
+     * Adds a request to the request repository
+     * @param request The request to add
+     * @throws IllegalArgumentException If the request was submitted as not pending or the request properties are invalid
+     */
+    public void addReimbursementRequest(PendingReimbursementRequest request) throws IllegalArgumentException {
+<span class="fc" id="L64">        if (</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">            request.getID() &lt; 0 ||</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            request.getAmount() &lt; 1f</span>
+<span class="fc" id="L67">        ) throw new IllegalArgumentException(&quot;Invalid request properties&quot;);</span>
+<span class="fc" id="L68">        this.reimbursementRequestRepository.insert(request);</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Gets all pending reimbursement requests
+     * @return The list of pending reimbursement requests
+     */
+    public List&lt;ReimbursementRequest&gt; getAllPendingReimbursements() {
+<span class="fc" id="L76">        return this.reimbursementRequestRepository.getAllFromStatus(true);</span>
+    }
+
+    /**
+     * Gets all resolved reimbursement requests
+     * @return The list of resolved reimbursement requests 
+     */
+    public List&lt;ReimbursementRequest&gt; getAllResolvedReimbursements() {
+<span class="fc" id="L84">        return this.reimbursementRequestRepository.getAllFromStatus(false);</span>
+    }
+
+    /**
+     * Gets all reimbursement requests from an employee
+     * @return The list of resolved reimbursement requests 
+     * @throws IllegalArgumentException If the ID is less than 0
+     */
+    public List&lt;ReimbursementRequest&gt; getAllEmployeeReimbursements(int employeeID) throws IllegalArgumentException {
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        if (employeeID &lt; 0) throw new IllegalArgumentException(&quot;Invalid id&quot;);</span>
+<span class="fc" id="L94">        return this.reimbursementRequestRepository.getAllFromEmployee(employeeID);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

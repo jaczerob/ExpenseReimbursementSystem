@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResolvedReimbursementRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project1</a> &gt; <a href="index.source.html" class="el_package">com.github.jaczerob.project1.models.requests</a> &gt; <span class="el_source">ResolvedReimbursementRequest.java</span></div><h1>ResolvedReimbursementRequest.java</h1><pre class="source lang-java linenums">package com.github.jaczerob.project1.models.requests;
+
+/**
+ * Represents a resolved reimbursement request
+ * @author Jacob
+ * @since 0.1
+ * @version 0.3
+ */
+public class ResolvedReimbursementRequest extends ReimbursementRequest {
+    private boolean approved;
+    private int approvedBy;
+
+    /**
+     * Create an instance of {@link ResolvedReimbursementRequest}
+     * @param id The ID of the reimbursement request
+     * @param employeeID The ID of the employee
+     * @param amount The amount of the reimbursement
+     * @param type The type of the reimbursement
+     * @param approved Whether the request was approved
+     * @param approvedBy The ID of the manager that resolved the reimbursement request
+     */
+    public ResolvedReimbursementRequest(int id, int employeeID, float amount, String type, boolean approved, int approvedBy) {
+<span class="fc" id="L23">        super(id, employeeID, amount, type);</span>
+<span class="fc" id="L24">        this.approved = approved;</span>
+<span class="fc" id="L25">        this.approvedBy = approvedBy;</span>
+<span class="fc" id="L26">    }</span>
+
+    /**
+     * Create an instance of {@link ResolvedReimbursementRequest} using a {@link PendingReimbursementRequest}
+     * @param id The ID of the reimbursement request
+     * @param employeeID The ID of the employee
+     * @param amount The amount of the reimbursement
+     * @param type The type of the reimbursement
+     * @param approved Whether the request was approved
+     * @param approvedBy The ID of the manager that resolved the reimbursement request
+     */
+    public ResolvedReimbursementRequest(PendingReimbursementRequest request, boolean approved, int approvedBy) {
+<span class="fc" id="L38">        super(request.getID(), request.getEmployeeID(), request.getAmount(), request.getType());</span>
+<span class="fc" id="L39">        this.approved = approved;</span>
+<span class="fc" id="L40">        this.approvedBy = approvedBy;</span>
+<span class="fc" id="L41">    }</span>
+
+    public boolean getApproved() {
+<span class="fc" id="L44">        return this.approved;</span>
+    }
+
+    public void setApproved(boolean approved) {
+<span class="nc" id="L48">        this.approved = approved;</span>
+<span class="nc" id="L49">    }</span>
+
+    public int getApprovedBy() {
+<span class="fc" id="L52">        return this.approvedBy;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
