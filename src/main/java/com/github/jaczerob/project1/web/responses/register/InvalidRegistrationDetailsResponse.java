@@ -9,7 +9,7 @@ import com.github.jaczerob.project1.web.responses.Response;
  * set information
  * @author Jacob
  * @since 0.9
- * @since 0.9
+ * @version 0.9
  */
 public class InvalidRegistrationDetailsResponse extends Response {
     /**

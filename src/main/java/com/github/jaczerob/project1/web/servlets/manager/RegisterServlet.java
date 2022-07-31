@@ -21,7 +21,7 @@ import com.github.jaczerob.project1.web.responses.register.SuccessfulRegistratio
  * A servlet exposing the /register endpoint for registering users
  * @author Jacob
  * @since 0.9
- * @since 0.9
+ * @version 0.9
  */
 @WebServlet(name="RegisterServlet", urlPatterns={"/register"})
 public class RegisterServlet extends ManagerServlet {

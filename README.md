@@ -11,12 +11,9 @@ The base URL for this project is http://localhost:8080/. To access logging in, f
 The way this is implemented is by making a POST request to `/login` with your username and password will check these fields against Users in the database and if there is a match, there will be a User (Employee or Manager depending on access) object attributed to the UserSession inside of Tomcat. This User object will be used to check access to the other endpoints in this program. When a `POST` request to `/logout` is called, the UserSession will be invalidated.
 
 - `/login` API endpoint
-    - Not implemented
+    - [LoginServlet](https://github.com/jaczerob/project1/blob/master/src/main/java/com/github/jaczerob/project1/web/servlets/common/LoginServlet.java)
+    - [LoginServletTest](https://github.com/jaczerob/project1/blob/master/src/test/java/com/github/jaczerob/web/servlets/common/LoginServletTest.java)
 - `/logout` API endpoint
-    - Not implemented
-- User authentication system
-    - Not implemented
-- UserSession User management
     - Not implemented
 
 ## Employees
@@ -47,7 +44,8 @@ Employees will be able to submit reimbursement requests by making a POST request
 Employees will be able to view their information by making a GET request to `/info`. This will show your email address, username, and employee ID. Employees will be able to update their information by making a PUT request to `/info/update` with the information you wish to update.
 
 - `/info` API endpoint
-    - Not implemented
+    - [InfoServlet](https://github.com/jaczerob/project1/blob/master/src/main/java/com/github/jaczerob/project1/web/servlets/common/InfoServlet.java)
+    - [InfoServletTest](https://github.com/jaczerob/project1/blob/master/src/test/java/com/github/jaczerob/web/servlets/common/InfoServletTest.java)
 - `/info/update` API endpoint
     - Not implemented
 <a name="employee-management-system"></a>
@@ -118,4 +116,4 @@ Managers can view all employees by making a GET request to `/employees`.
 - Configure database with the SQLTools extension
 - Check code coverage
     - Run `mvn clean jacoco:prepare-agent install jacoco:report` to get coverage report
-    - To view coverage report, open `target/site/jacoco/index.html`.
+    - To view coverage report, open `src/main/webapp/unittests/index.html` in VSCode preview.

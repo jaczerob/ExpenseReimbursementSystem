@@ -4,19 +4,24 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.github.jaczerob.project1.web.responses.Response;
 
+/**
+ * Represents a HTTP response if a user attempted did not set
+ * the appropriate parameters in the form body
+ * @author Jacob
+ * @since 0.9
+ * @version 0.9
+ */
 public class InvalidParametersResponse extends Response {
     private String[] parameters;
 
-<span class="nc" id="L10">    public InvalidParametersResponse() {}</span>
-
-<span class="fc" id="L12">    public InvalidParametersResponse(HttpServletResponse resp, String... parameters) {</span>
-<span class="fc" id="L13">        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);</span>
-<span class="fc" id="L14">        this.setMessage(&quot;Invalid parameters set.&quot;);</span>
-<span class="fc" id="L15">        this.parameters = parameters;</span>
-<span class="fc" id="L16">    }</span>
+<span class="fc" id="L17">    public InvalidParametersResponse(HttpServletResponse resp, String... parameters) {</span>
+<span class="fc" id="L18">        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);</span>
+<span class="fc" id="L19">        this.setMessage(&quot;Invalid parameters set.&quot;);</span>
+<span class="fc" id="L20">        this.parameters = parameters;</span>
+<span class="fc" id="L21">    }</span>
 
     public String getParameters() {
-<span class="fc" id="L19">        return String.format(&quot;The parameters for this endpoint are: %s&quot;, String.join(&quot;, &quot;, this.parameters));</span>
+<span class="fc" id="L24">        return String.format(&quot;The parameters for this endpoint are: %s&quot;, String.join(&quot;, &quot;, this.parameters));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

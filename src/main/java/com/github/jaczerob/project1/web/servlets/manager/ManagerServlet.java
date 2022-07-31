@@ -18,7 +18,7 @@ import com.github.jaczerob.project1.web.servlets.Servlet;
  * An abstract servlet providing authentication for all Manager endpoints
  * @author Jacob
  * @since 0.9
- * @since 0.9
+ * @version 0.10
  */
 public abstract class ManagerServlet extends Servlet {
     @Override

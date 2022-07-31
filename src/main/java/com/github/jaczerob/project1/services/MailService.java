@@ -16,7 +16,7 @@ import javax.mail.internet.MimeMessage;
  * Represents a service that sends mail from a SMTP server
  * @author Jacob
  * @since 0.5
- * @since 0.5
+ * @version 0.5
  */
 public class MailService {
     private final String username;

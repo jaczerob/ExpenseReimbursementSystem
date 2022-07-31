@@ -8,7 +8,7 @@ import com.github.jaczerob.project1.web.responses.Response;
  * Represents a HTTP response if a user successfully logged in
  * @author Jacob
  * @since 0.9
- * @since 0.9
+ * @version 0.9
  */
 public class SuccessfulLoginResponse extends Response {
     /**

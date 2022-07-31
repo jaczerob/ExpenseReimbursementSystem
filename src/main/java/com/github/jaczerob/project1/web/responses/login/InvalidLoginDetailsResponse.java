@@ -9,7 +9,7 @@ import com.github.jaczerob.project1.web.responses.Response;
  * set credentials.
  * @author Jacob
  * @since 0.9
- * @since 0.9
+ * @version 0.9
  */
 public class InvalidLoginDetailsResponse extends Response {
     /**

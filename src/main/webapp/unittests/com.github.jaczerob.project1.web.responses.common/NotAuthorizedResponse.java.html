@@ -4,10 +4,22 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.github.jaczerob.project1.web.responses.Response;
 
+/**
+ * Represents a HTTP response if a user attempted to use an
+ * endpoint that they did not have access to
+ * @author Jacob
+ * @since 0.9
+ * @version 0.9
+ */
 public class NotAuthorizedResponse extends Response {
-<span class="fc" id="L8">    public NotAuthorizedResponse(HttpServletResponse resp) {</span>
-<span class="fc" id="L9">        resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);</span>
-<span class="fc" id="L10">        this.setMessage(&quot;You are not authorized to access this endpoint.&quot;);</span>
-<span class="fc" id="L11">    }</span>
+    /**
+     * Constructs a new NotAuthorizedResponse
+     * Sets the status code to 401 (Unauthorized)
+     * @param resp The raw HTTP response
+     */
+<span class="fc" id="L20">    public NotAuthorizedResponse(HttpServletResponse resp) {</span>
+<span class="fc" id="L21">        resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);</span>
+<span class="fc" id="L22">        this.setMessage(&quot;You are not authorized to access this endpoint.&quot;);</span>
+<span class="fc" id="L23">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

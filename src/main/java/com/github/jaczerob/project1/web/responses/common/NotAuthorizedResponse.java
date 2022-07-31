@@ -9,7 +9,7 @@ import com.github.jaczerob.project1.web.responses.Response;
  * endpoint that they did not have access to
  * @author Jacob
  * @since 0.9
- * @since 0.9
+ * @version 0.9
  */
 public class NotAuthorizedResponse extends Response {
     /**

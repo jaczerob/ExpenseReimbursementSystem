@@ -4,7 +4,7 @@ package com.github.jaczerob.project1.web.responses;
  * An abstract base class for all Response objects
  * @author Jacob
  * @since 0.9
- * @since 0.9
+ * @version 0.9
  */
 public abstract class Response {
     private String message;

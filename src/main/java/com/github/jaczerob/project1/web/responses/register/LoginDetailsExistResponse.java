@@ -9,7 +9,7 @@ import com.github.jaczerob.project1.web.responses.Response;
  * login details belonging to another user
  * @author Jacob
  * @since 0.9
- * @since 0.9
+ * @version 0.9
  */
 public class LoginDetailsExistResponse extends Response {
     /**

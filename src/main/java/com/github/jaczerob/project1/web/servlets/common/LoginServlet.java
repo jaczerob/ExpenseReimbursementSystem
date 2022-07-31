@@ -23,7 +23,7 @@ import com.github.jaczerob.project1.web.servlets.Servlet;
  * A servlet exposing the /login endpoint for logging in users
  * @author Jacob
  * @since 0.9
- * @since 0.9
+ * @version 0.9
  */
 @WebServlet(name="LoginServlet", urlPatterns={"/login"})
 public class LoginServlet extends Servlet {

@@ -8,7 +8,7 @@ import com.github.jaczerob.project1.web.responses.Response;
  * Represents a HTTP response if a user has successfully registered
  * @author Jacob
  * @since 0.9
- * @since 0.9
+ * @version 0.9
  */
 public class SuccessfulRegistrationResponse extends Response {
     /**

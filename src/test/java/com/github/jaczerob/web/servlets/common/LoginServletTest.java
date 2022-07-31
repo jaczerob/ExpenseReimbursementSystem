@@ -63,9 +63,10 @@ public class LoginServletTest {
         Mockito.doReturn(context).when(loginServlet).getServletContext();
         Mockito.when(context.getAttribute("userService")).thenReturn(userService);
         Mockito.when(context.getAttribute("objectMapper")).thenReturn(mapper);
-        loginServlet.init();
-        
         Mockito.when(resp.getWriter()).thenReturn(pw);
+        Mockito.when(req.getSession(true)).thenReturn(session);
+        
+        loginServlet.init();
     }
 
     @Test
@@ -75,7 +76,6 @@ public class LoginServletTest {
 
         Mockito.when(req.getParameter("username")).thenReturn(user.getUsername());
         Mockito.when(req.getParameter("password")).thenReturn(user.getPassword());
-        Mockito.when(req.getSession(true)).thenReturn(session);
         Mockito.when(session.getAttribute("user")).thenReturn(null);
         Mockito.when(userService.loginUser(user.getUsername(), user.getPassword())).thenReturn(Optional.of(user));
         
@@ -140,7 +140,6 @@ public class LoginServletTest {
 
         Mockito.when(req.getParameter("username")).thenReturn("");
         Mockito.when(req.getParameter("password")).thenReturn("");
-        Mockito.when(req.getSession(true)).thenReturn(session);
         Mockito.when(session.getAttribute("user")).thenReturn("");
 
         Mockito.doAnswer(new Answer<Void>() {
@@ -168,7 +167,6 @@ public class LoginServletTest {
 
         Mockito.when(req.getParameter("username")).thenReturn(user.getUsername());
         Mockito.when(req.getParameter("password")).thenReturn(user.getPassword());
-        Mockito.when(req.getSession(true)).thenReturn(session);
         Mockito.when(session.getAttribute("user")).thenReturn(null);
         Mockito.when(userService.loginUser(user.getUsername(), user.getPassword())).thenReturn(Optional.empty());
         
@@ -197,7 +195,6 @@ public class LoginServletTest {
 
         Mockito.when(req.getParameter("username")).thenReturn(user.getUsername());
         Mockito.when(req.getParameter("password")).thenReturn(user.getPassword());
-        Mockito.when(req.getSession(true)).thenReturn(session);
         Mockito.when(session.getAttribute("user")).thenReturn(null);
         Mockito.when(userService.loginUser(user.getUsername(), user.getPassword())).thenThrow(IllegalArgumentException.class);
         

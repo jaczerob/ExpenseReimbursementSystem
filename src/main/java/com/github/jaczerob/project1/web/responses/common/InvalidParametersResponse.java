@@ -9,7 +9,7 @@ import com.github.jaczerob.project1.web.responses.Response;
  * the appropriate parameters in the form body
  * @author Jacob
  * @since 0.9
- * @since 0.9
+ * @version 0.9
  */
 public class InvalidParametersResponse extends Response {
     private String[] parameters;
