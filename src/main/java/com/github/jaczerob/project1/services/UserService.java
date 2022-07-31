@@ -37,6 +37,24 @@ public class UserService {
     }
 
     /**
+     * Gets a user if the username and password match a record in the database
+     * @param username The username of the user
+     * @param password The password of the user
+     * @return The optional user object
+     * @throws IllegalArgumentException If the username or password is not valid
+     */
+    public Optional<User> loginUser(String username, String password) throws IllegalArgumentException {
+        if (username.isEmpty() || username.length() > 32) throw new IllegalArgumentException("Invalid login details");
+        if (password.isEmpty() || password.length() > 255) throw new IllegalArgumentException("Invalid login details");
+        
+        Optional<User> user = this.userRepository.get(username);
+        if (user.isPresent())
+            user = user.get().getPassword().equals(password) ? user : Optional.empty();
+
+        return user;
+    }
+
+    /**
      * Registers a user
      * @param user The user to register
      * @throws RecordAlreadyExistsException If the user already exists

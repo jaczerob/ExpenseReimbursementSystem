@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ManagerServlet.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project1</a> &gt; <a href="index.source.html" class="el_package">com.github.jaczerob.project1.web.servlets.manager</a> &gt; <span class="el_source">ManagerServlet.java</span></div><h1>ManagerServlet.java</h1><pre class="source lang-java linenums">package com.github.jaczerob.project1.web.servlets.manager;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.jaczerob.project1.models.users.Manager;
+import com.github.jaczerob.project1.web.responses.Response;
+import com.github.jaczerob.project1.web.responses.common.NotAuthorizedResponse;
+import com.github.jaczerob.project1.web.servlets.Servlet;
+
+
+/**
+ * An abstract servlet providing authentication for all Manager endpoints
+ * @author Jacob
+ * @since 0.9
+ * @since 0.9
+ */
+<span class="fc" id="L23">public abstract class ManagerServlet extends Servlet {</span>
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+<span class="fc" id="L26">        HttpSession session = req.getSession(true);</span>
+<span class="pc bpc" id="L27" title="1 of 4 branches missed.">        if (session.getAttribute(&quot;user&quot;) == null || !(session.getAttribute(&quot;user&quot;) instanceof Manager)) {</span>
+<span class="fc" id="L28">            Response response = new NotAuthorizedResponse(resp);</span>
+<span class="fc" id="L29">            resp.getWriter().write(new ObjectMapper().writeValueAsString(response));</span>
+<span class="fc" id="L30">            return;</span>
+        }
+        
+<span class="nc" id="L33">        super.service(req, resp);</span>
+<span class="nc" id="L34">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
