@@ -19,3 +19,7 @@ CREATE TABLE IF NOT EXISTS reimbursement_requests (
     FOREIGN KEY (reimbursement_request_employee_id) REFERENCES users (user_id),
     FOREIGN KEY (reimbursement_request_manager_id) REFERENCES users (user_id)
 );
+
+INSERT INTO users (user_email, user_username, user_password, user_is_manager)
+VALUES ('thewallacems@gmail.com', 'jacob', 'password', 'TRUE') 
+ON CONFLICT DO NOTHING;

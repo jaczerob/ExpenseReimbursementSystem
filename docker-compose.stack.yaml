@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  postgresd:
+    image: postgres:latest
+    restart: on-failure
+    environment:
+      POSTGRES_DB: ers
+      POSTGRES_PASSWORD: vedzic-mekDi1-wepwuc
+    volumes:
+      # puts a postgres initialization script for postgres to run when a container is created
+      # (create table if not exists... etc)
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5432:5432
+  webappd:
+    image: tomcat:9.0
+    restart: on-failure
+    environment:
+      # sets the postgres connect options in the JVM that can be accessed in the context.xaml file for our web app
+      # postgresd is our URL instead of localhost because we want it to connect to our postgresd container
+      - JAVA_OPTS=-Ddb.url=postgresd -Ddb.password=vedzic-mekDi1-wepwuc
+    volumes:
+      # puts the WAR file that tomcat needs to run into the container
+      - ./target/ROOT.war:/usr/local/tomcat/webapps/ROOT.war
+    ports:
+      - 8080:8080

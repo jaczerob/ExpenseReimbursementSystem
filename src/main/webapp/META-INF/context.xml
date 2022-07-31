@@ -31,7 +31,7 @@
             maxTotal="8"
             maxWaitMillis="10000"
             driverClassName="org.postgresql.Driver"
-            url="jdbc:postgresql://localhost:5432/ers"
+            url="jdbc:postgresql://${db.url}:5432/ers"
             username="postgres"
-            password="vedzic-mekDi1-wepwuc"/>
+            password="${db.password}"/>
 </Context>

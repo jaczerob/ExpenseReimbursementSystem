@@ -4,3 +4,4 @@
 mail.properties
 target/
 logs/
+*.aws.yaml

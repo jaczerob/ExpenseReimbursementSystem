@@ -90,8 +90,6 @@ Managers can view all employees by making a GET request to `/employees`.
 <h2 align="center">How to run</h2>
 
 ## My VSCode Extensions
-- Community Service Connectors
-    - Deploying to and managing Tomcat
 - Extension Pack for Java
     - Various extensions for easier Java development
 - Thunder Client
@@ -101,19 +99,15 @@ Managers can view all employees by making a GET request to `/employees`.
 - Coverage Gutters
     - Unit test coverage per file
 
-## How to build and deploy to Tomcat
-- mvn package
-    - Creates an app.war under the target directory
-- Create and configure Tomcat server with Community Server Connector
-    - Under the Servers tab, right click Community Server Connector and click "Create New Server..."
-        - Create an Apache Tomcat 9.0.41 server. This version is important. Do not go over it.
-    - Under the Servers tab, right click the newly created server "apache-tomcat-9.0.41" and click "Add Deployment"
-        - Add the app.war under the target directory
-    - Right click the Tomcat server and click "Start Server"
-    - To configure, right click the Tomcat Server and click "Server Actions..." and click "Edit Configuration File..."
-    - After any re-build of the project, stop the Tomcat server, right click the Tomcat server, and click "Publish Server (Full)" to re-deploy the WAR file.
+## How to build and deploy
+- Requirements
+    - Maven
+    - Docker
+    - docker-compose
+- Run `mvn clean jacoco:prepare-agent install jacoco:report`
+- Run `docker-compose -f docker-compose.*.yaml up -d --build`
+    - *stack/aws depending on if you want to use PostgreSQL locally or via AWS
+
+## Testing
 - Test API endpoints with the Thunder Client extension
-- Configure database with the SQLTools extension
-- Check code coverage
-    - Run `mvn clean jacoco:prepare-agent install jacoco:report` to get coverage report
-    - To view coverage report, open `src/main/webapp/unittests/index.html` in VSCode preview.
+- Configure/manage database with the SQLTools extension
