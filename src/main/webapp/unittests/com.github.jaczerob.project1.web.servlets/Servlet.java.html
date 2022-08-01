@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,25 +15,65 @@ import javax.servlet.http.HttpServletResponse;
  * An abstract servlet providing base logging functionality to all Servlets
  * @author Jacob
  * @since 0.9
- * @version 0.9
+ * @version 0.12
  */
-<span class="fc" id="L19">public abstract class Servlet extends HttpServlet {</span>
-<span class="fc" id="L20">    private static Logger logger = LogManager.getLogger(Servlet.class);</span>
+<span class="fc" id="L20">public abstract class Servlet extends HttpServlet {</span>
+<span class="fc" id="L21">    private static Logger logger = LogManager.getLogger(Servlet.class);</span>
     
     @Override
     public void init() throws ServletException {
-<span class="fc" id="L24">        logger.info(String.format(&quot;%s initializing&quot;, this.getClass().getSimpleName()));</span>
-<span class="fc" id="L25">    }</span>
+<span class="fc" id="L25">        logger.info(&quot;{} initializing&quot;, this.getClass().getSimpleName());</span>
+<span class="fc" id="L26">    }</span>
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-<span class="nc" id="L29">        logger.info(String.format(&quot;servicing %s method to URL %s&quot;, req.getMethod(), req.getRequestURL().toString()));</span>
-<span class="nc" id="L30">        super.service(req, resp);</span>
-<span class="nc" id="L31">    }</span>
+<span class="nc" id="L30">        resp.setContentType(&quot;application/json&quot;);</span>
+
+<span class="nc" id="L32">        StringBuilder formatParams = new StringBuilder();</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        for (Entry&lt;String, String[]&gt; entry : req.getParameterMap().entrySet()) {</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">            if (entry.getKey().equals(&quot;password&quot;)) {</span>
+<span class="nc" id="L35">                formatParams.append(&quot;*****&quot;);</span>
+            } else {
+<span class="nc" id="L37">                formatParams.append(String.join(&quot; &quot;));</span>
+            }
+
+<span class="nc" id="L40">            formatParams.append(&quot; &quot;);</span>
+<span class="nc" id="L41">        }</span>
+        
+<span class="nc" id="L43">        String formattedParams = formatParams.toString().trim();</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (formattedParams.isEmpty()) {</span>
+<span class="nc" id="L45">            logger.info(&quot;servicing {} method to URL {}&quot;, req.getMethod(), req.getRequestURL());</span>
+        } else {
+<span class="nc" id="L47">            logger.info(&quot;servicing {} method to URL {} with parameters: {}&quot;, req.getMethod(), req.getRequestURL(), formatParams);</span>
+        }
+
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (req.getMethod().equalsIgnoreCase(&quot;PATCH&quot;)) {</span>
+<span class="nc" id="L51">            this.doPatch(req, resp);</span>
+        } else {
+<span class="nc" id="L53">            super.service(req, resp);</span>
+        }
+<span class="nc" id="L55">    }</span>
+
+    /**
+     * Just like PUT except it can be non-idempotent and only requires partial represenation of a resource
+     * @param req an HttpServletRequest object that contains the request the client has made of the servlet
+     * @param resp an HttpServletResponse object that contains the response the servlet sends to the client
+     * @throws ServletException if the request for the PATCH could not be handled
+     * @throws IOExceptionif an input or output error is detected when the servlet handles the PATCH request
+     */
+    public void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+<span class="nc" id="L65">        String protocol = req.getProtocol();</span>
+<span class="nc" id="L66">        String msg = &quot;This method is not supported on this endpoint.&quot;;</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (protocol.endsWith(&quot;1.1&quot;)) {</span>
+<span class="nc" id="L68">            resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, msg);</span>
+        } else {
+<span class="nc" id="L70">            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, msg);</span>
+        }
+<span class="nc" id="L72">    }</span>
 
     @Override
     public void destroy() {
-<span class="nc" id="L35">        logger.info(String.format(&quot;%s destroying&quot;, this.getClass().getSimpleName()));</span>
-<span class="nc" id="L36">    }</span>
+<span class="nc" id="L76">        logger.info(&quot;{} destroying&quot;, this.getClass().getSimpleName());</span>
+<span class="nc" id="L77">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

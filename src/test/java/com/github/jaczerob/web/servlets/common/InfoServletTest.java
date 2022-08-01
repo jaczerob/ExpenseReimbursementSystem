@@ -58,14 +58,7 @@ public class InfoServletTest {
         Mockito.when(resp.getWriter()).thenReturn(pw);
         Mockito.when(req.getSession(true)).thenReturn(session);
         infoServlet.init();
-    }
 
-    @Test
-    public void testInfoSuccess() throws ServletException, IOException {
-        User user = new Employee(1, "email", "username", "password");
-        int wantStatus = HttpServletResponse.SC_OK;
-
-        Mockito.when(session.getAttribute("user")).thenReturn(user);
         Mockito.doAnswer(new Answer<Void>() {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
@@ -74,7 +67,15 @@ public class InfoServletTest {
                 gotStatus = responseStatus;
                 return null;
             }
-        }).when(resp).setStatus(wantStatus);
+        }).when(resp).setStatus(Mockito.anyInt());
+    }
+
+    @Test
+    public void testInfoSuccess() throws ServletException, IOException {
+        User user = new Employee(1, "email", "username", "password");
+        int wantStatus = HttpServletResponse.SC_OK;
+
+        Mockito.when(session.getAttribute("user")).thenReturn(user);
 
         infoServlet.doGet(req, resp);
 
@@ -92,16 +93,6 @@ public class InfoServletTest {
         int wantStatus = HttpServletResponse.SC_UNAUTHORIZED;
 
         Mockito.when(session.getAttribute("user")).thenReturn(null);
-
-        Mockito.doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                Integer responseStatus = (Integer) args[0];
-                gotStatus = responseStatus;
-                return null;
-            }
-        }).when(resp).setStatus(wantStatus);
 
         infoServlet.doGet(req, resp);
 

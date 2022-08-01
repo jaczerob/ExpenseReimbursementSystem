@@ -24,7 +24,7 @@ import com.github.jaczerob.project1.web.servlets.Servlet;
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 <span class="fc" id="L26">        HttpSession session = req.getSession(true);</span>
-<span class="pc bpc" id="L27" title="1 of 4 branches missed.">        if (session.getAttribute(&quot;user&quot;) == null || !(session.getAttribute(&quot;user&quot;) instanceof Manager)) {</span>
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        if (!(session.getAttribute(&quot;user&quot;) instanceof Manager)) {</span>
 <span class="fc" id="L28">            Response response = new NotAuthorizedResponse(resp);</span>
 <span class="fc" id="L29">            resp.getWriter().write(new ObjectMapper().writeValueAsString(response));</span>
 <span class="fc" id="L30">            return;</span>

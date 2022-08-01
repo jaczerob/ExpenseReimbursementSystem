@@ -16,7 +16,7 @@ import javax.mail.internet.MimeMessage;
  * Represents a service that sends mail from a SMTP server
  * @author Jacob
  * @since 0.5
- * @version 0.5
+ * @version 0.12
  */
 public class MailService {
     private final String username;
@@ -30,11 +30,12 @@ public class MailService {
 <span class="fc" id="L30">        username = mailProperties.remove(&quot;mail.smtp.username&quot;).toString();</span>
 <span class="fc" id="L31">        String password = mailProperties.remove(&quot;mail.smtp.password&quot;).toString();</span>
 <span class="fc" id="L32">        this.session = Session.getInstance(mailProperties, new Authenticator() {</span>
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-<span class="fc" id="L34">                return new PasswordAuthentication(username, password);</span>
+<span class="fc" id="L35">                return new PasswordAuthentication(username, password);</span>
             }
         });
-<span class="fc" id="L37">    }</span>
+<span class="fc" id="L38">    }</span>
 
     /**
      * Sends an email to the specified email
@@ -45,12 +46,12 @@ public class MailService {
      * @throws MessagingException If there was an error sending the email internally
      */
     public void sendEmail(String email, String subject, String text) throws AddressException, MessagingException {
-<span class="fc" id="L48">        Message message = new MimeMessage(session);</span>
-<span class="fc" id="L49">        message.setFrom(new InternetAddress(username));</span>
-<span class="fc" id="L50">        message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));</span>
-<span class="fc" id="L51">        message.setSubject(subject);</span>
-<span class="fc" id="L52">        message.setText(text);</span>
-<span class="fc" id="L53">        Transport.send(message);</span>
-<span class="fc" id="L54">    }</span>
+<span class="fc" id="L49">        Message message = new MimeMessage(session);</span>
+<span class="fc" id="L50">        message.setFrom(new InternetAddress(username));</span>
+<span class="fc" id="L51">        message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));</span>
+<span class="fc" id="L52">        message.setSubject(subject);</span>
+<span class="fc" id="L53">        message.setText(text);</span>
+<span class="fc" id="L54">        Transport.send(message);</span>
+<span class="fc" id="L55">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

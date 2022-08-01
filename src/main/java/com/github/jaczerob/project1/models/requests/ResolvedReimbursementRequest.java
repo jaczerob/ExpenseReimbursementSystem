@@ -4,7 +4,7 @@ package com.github.jaczerob.project1.models.requests;
  * Represents a resolved reimbursement request
  * @author Jacob
  * @since 0.1
- * @version 0.3
+ * @version 0.12
  */
 public class ResolvedReimbursementRequest extends ReimbursementRequest {
     private boolean approved;
@@ -50,5 +50,21 @@ public class ResolvedReimbursementRequest extends ReimbursementRequest {
 
     public int getApprovedBy() {
         return this.approvedBy;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ResolvedReimbursementRequest)) return false;
+
+        ResolvedReimbursementRequest other = (ResolvedReimbursementRequest) obj;
+
+        return super.equals(obj) && 
+                other.getApproved() == this.getApproved() &&
+                other.getApprovedBy() == this.getApprovedBy();
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

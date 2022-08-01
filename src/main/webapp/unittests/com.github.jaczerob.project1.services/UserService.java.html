@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.github.jaczerob.project1.exceptions.RecordAlreadyExistsException;
+import com.github.jaczerob.project1.exceptions.RecordNotExistsException;
 import com.github.jaczerob.project1.models.users.Employee;
 import com.github.jaczerob.project1.models.users.User;
 import com.github.jaczerob.project1.repositories.UserRepository;
@@ -12,7 +13,7 @@ import com.github.jaczerob.project1.repositories.UserRepository;
  * Represents the user service bridge to the repository
  * @author Jacob
  * @since 0.2
- * @version 0.3
+ * @version 0.12
  */
 public class UserService {
     private UserRepository userRepository;
@@ -21,9 +22,9 @@ public class UserService {
      * Constructor for {@link UserService}
      * @param userRepository
      */
-<span class="fc" id="L24">    public UserService(UserRepository userRepository) {</span>
-<span class="fc" id="L25">        this.userRepository = userRepository;</span>
-<span class="fc" id="L26">    }</span>
+<span class="fc" id="L25">    public UserService(UserRepository userRepository) {</span>
+<span class="fc" id="L26">        this.userRepository = userRepository;</span>
+<span class="fc" id="L27">    }</span>
 
     /**
      * Gets a user by their username
@@ -32,9 +33,28 @@ public class UserService {
      * @throws IllegalArgumentException If the username is not valid
      */
     public Optional&lt;User&gt; getUser(String username) throws IllegalArgumentException {
-<span class="fc bfc" id="L35" title="All 4 branches covered.">        if (username.isEmpty() || username.length() &gt; 32) throw new IllegalArgumentException(&quot;Invalid username&quot;);</span>
-<span class="fc" id="L36">        return this.userRepository.get(username);</span>
+<span class="fc bfc" id="L36" title="All 4 branches covered.">        if (username.isEmpty() || username.length() &gt; 32) throw new IllegalArgumentException(&quot;Invalid username&quot;);</span>
+<span class="fc" id="L37">        return this.userRepository.get(username);</span>
     }
+
+    /**
+     * Updates an existing user
+     * @param user The user to update
+     * @throws RecordNotExistsException If the user does not exist
+     */
+    public void updateUser(User user) throws RecordNotExistsException {
+<span class="fc" id="L46">        if (</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">            user.getID() &lt; 0 || </span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">            user.getUsername().isEmpty() || </span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            user.getUsername().length() &gt; 32 ||</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            user.getPassword().isEmpty() ||</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">            user.getPassword().length() &gt; 255 ||</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            user.getEmail().isEmpty() ||</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            user.getEmail().length() &gt; 255</span>
+<span class="fc" id="L54">        ) throw new IllegalArgumentException(&quot;Invalid properties&quot;);</span>
+
+<span class="fc" id="L56">        this.userRepository.update(user);</span>
+<span class="fc" id="L57">    }</span>
 
     /**
      * Gets a user if the username and password match a record in the database
@@ -44,14 +64,14 @@ public class UserService {
      * @throws IllegalArgumentException If the username or password is not valid
      */
     public Optional&lt;User&gt; loginUser(String username, String password) throws IllegalArgumentException {
-<span class="nc bnc" id="L47" title="All 4 branches missed.">        if (username.isEmpty() || username.length() &gt; 32) throw new IllegalArgumentException(&quot;Invalid login details&quot;);</span>
-<span class="nc bnc" id="L48" title="All 4 branches missed.">        if (password.isEmpty() || password.length() &gt; 255) throw new IllegalArgumentException(&quot;Invalid login details&quot;);</span>
+<span class="nc bnc" id="L67" title="All 4 branches missed.">        if (username.isEmpty() || username.length() &gt; 32) throw new IllegalArgumentException(&quot;Invalid login details&quot;);</span>
+<span class="nc bnc" id="L68" title="All 4 branches missed.">        if (password.isEmpty() || password.length() &gt; 255) throw new IllegalArgumentException(&quot;Invalid login details&quot;);</span>
         
-<span class="nc" id="L50">        Optional&lt;User&gt; user = this.userRepository.get(username);</span>
-<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (user.isPresent())</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">            user = user.get().getPassword().equals(password) ? user : Optional.empty();</span>
+<span class="nc" id="L70">        Optional&lt;User&gt; user = this.userRepository.get(username);</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (user.isPresent())</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">            user = user.get().getPassword().equals(password) ? user : Optional.empty();</span>
 
-<span class="nc" id="L54">        return user;</span>
+<span class="nc" id="L74">        return user;</span>
     }
 
     /**
@@ -61,25 +81,25 @@ public class UserService {
      * @throws IllegalArgumentException If the user properties are invalid
      */
     public void registerUser(User user) throws IllegalArgumentException, RecordAlreadyExistsException {
-<span class="fc" id="L64">        if (</span>
-<span class="fc bfc" id="L65" title="All 2 branches covered.">            user.getID() &lt; 0 || </span>
-<span class="fc bfc" id="L66" title="All 2 branches covered.">            user.getUsername().isEmpty() || </span>
-<span class="fc bfc" id="L67" title="All 2 branches covered.">            user.getUsername().length() &gt; 32 ||</span>
-<span class="fc bfc" id="L68" title="All 2 branches covered.">            user.getPassword().isEmpty() ||</span>
-<span class="fc bfc" id="L69" title="All 2 branches covered.">            user.getPassword().length() &gt; 255 ||</span>
-<span class="fc bfc" id="L70" title="All 2 branches covered.">            user.getEmail().isEmpty() ||</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">            user.getEmail().length() &gt; 255</span>
-<span class="fc" id="L72">        ) throw new IllegalArgumentException(&quot;Invalid properties&quot;);</span>
+<span class="fc" id="L84">        if (</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">            user.getID() &lt; 0 || </span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">            user.getUsername().isEmpty() || </span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">            user.getUsername().length() &gt; 32 ||</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            user.getPassword().isEmpty() ||</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">            user.getPassword().length() &gt; 255 ||</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">            user.getEmail().isEmpty() ||</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">            user.getEmail().length() &gt; 255</span>
+<span class="fc" id="L92">        ) throw new IllegalArgumentException(&quot;Invalid properties&quot;);</span>
 
-<span class="fc" id="L74">        this.userRepository.insert(user);</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L94">        this.userRepository.insert(user);</span>
+<span class="fc" id="L95">    }</span>
 
     /**
      * Gets all employees
      * @return A list of all employees
      */
     public List&lt;Employee&gt; getAllEmployees() {
-<span class="fc" id="L82">        return this.userRepository.getAllEmployees();</span>
+<span class="fc" id="L102">        return this.userRepository.getAllEmployees();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

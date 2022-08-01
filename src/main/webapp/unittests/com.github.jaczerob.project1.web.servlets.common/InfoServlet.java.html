@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jaczerob.project1.models.users.User;
 import com.github.jaczerob.project1.web.responses.Response;
 import com.github.jaczerob.project1.web.responses.common.NotAuthorizedResponse;
-import com.github.jaczerob.project1.web.responses.information.UserInformationResponse;
+import com.github.jaczerob.project1.web.responses.employee.information.UserInformationResponse;
 import com.github.jaczerob.project1.web.servlets.Servlet;
 
 /**

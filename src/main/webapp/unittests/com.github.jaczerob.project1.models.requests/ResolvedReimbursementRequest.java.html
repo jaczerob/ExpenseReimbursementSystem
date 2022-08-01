@@ -4,7 +4,7 @@
  * Represents a resolved reimbursement request
  * @author Jacob
  * @since 0.1
- * @version 0.3
+ * @version 0.12
  */
 public class ResolvedReimbursementRequest extends ReimbursementRequest {
     private boolean approved;
@@ -50,6 +50,22 @@ public class ResolvedReimbursementRequest extends ReimbursementRequest {
 
     public int getApprovedBy() {
 <span class="fc" id="L52">        return this.approvedBy;</span>
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (!(obj instanceof ResolvedReimbursementRequest)) return false;</span>
+
+<span class="fc" id="L59">        ResolvedReimbursementRequest other = (ResolvedReimbursementRequest) obj;</span>
+
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        return super.equals(obj) &amp;&amp; </span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">                other.getApproved() == this.getApproved() &amp;&amp;</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">                other.getApprovedBy() == this.getApprovedBy();</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L68">        return super.hashCode();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

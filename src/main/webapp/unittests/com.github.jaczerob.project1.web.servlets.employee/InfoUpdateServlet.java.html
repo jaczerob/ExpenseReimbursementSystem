@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InfoUpdateServlet.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project1</a> &gt; <a href="index.source.html" class="el_package">com.github.jaczerob.project1.web.servlets.employee</a> &gt; <span class="el_source">InfoUpdateServlet.java</span></div><h1>InfoUpdateServlet.java</h1><pre class="source lang-java linenums">package com.github.jaczerob.project1.web.servlets.employee;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.jaczerob.project1.exceptions.RecordNotExistsException;
+import com.github.jaczerob.project1.models.users.Employee;
+import com.github.jaczerob.project1.services.UserService;
+import com.github.jaczerob.project1.web.responses.Response;
+import com.github.jaczerob.project1.web.responses.common.ServerError;
+import com.github.jaczerob.project1.web.responses.employee.update.NoUpdateResponse;
+import com.github.jaczerob.project1.web.responses.employee.update.SuccessfulUpdateResponse;
+
+@WebServlet(name=&quot;InfoUpdateServlet&quot;, urlPatterns={&quot;/info/update&quot;})
+<span class="nc" id="L25">public class InfoUpdateServlet extends EmployeeServlet {</span>
+    private UserService userService;
+    private ObjectMapper objectMapper;
+
+    @Override
+    public void init() throws ServletException {
+<span class="nc" id="L31">        userService = (UserService) this.getServletContext().getAttribute(&quot;userService&quot;);</span>
+<span class="nc" id="L32">        objectMapper = (ObjectMapper) this.getServletContext().getAttribute(&quot;objectMapper&quot;);</span>
+<span class="nc" id="L33">        super.init();</span>
+<span class="nc" id="L34">    }</span>
+
+    @Override
+    public void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+<span class="nc" id="L38">        HttpSession session = req.getSession(true);</span>
+<span class="nc" id="L39">        Employee employee = (Employee) session.getAttribute(&quot;user&quot;);</span>
+<span class="nc" id="L40">        Map&lt;String, String&gt; params = new HashMap&lt;&gt;();</span>
+        
+<span class="nc" id="L42">        try (</span>
+<span class="nc" id="L43">            InputStreamReader reader = new InputStreamReader(req.getInputStream());</span>
+<span class="nc" id="L44">            BufferedReader br = new BufferedReader(reader)</span>
+        ) {
+<span class="nc bnc" id="L46" title="All 2 branches missed.">            for (String param : br.readLine().split(&quot;&amp;&quot;)) {</span>
+<span class="nc" id="L47">                String[] keyValue = param.split(&quot;=&quot;);</span>
+<span class="nc" id="L48">                params.put(keyValue[0], keyValue[1]);</span>
+            }
+        }
+
+<span class="nc" id="L52">        String newUsername = params.get(&quot;username&quot;);</span>
+<span class="nc" id="L53">        String newPassword = params.get(&quot;password&quot;);</span>
+<span class="nc" id="L54">        String newEmail = params.get(&quot;email&quot;);</span>
+
+<span class="nc" id="L56">        Response response = null;</span>
+
+<span class="nc bnc" id="L58" title="All 6 branches missed.">        if (newUsername == null &amp;&amp; newPassword == null &amp;&amp; newEmail == null) {</span>
+<span class="nc" id="L59">            response = new NoUpdateResponse(resp);</span>
+        } else {
+<span class="nc bnc" id="L61" title="All 2 branches missed.">            if (newUsername != null) employee.setUsername(newUsername);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">            if (newPassword != null) employee.setPassword(newPassword);</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">            if (newEmail != null) employee.setEmail(newEmail);</span>
+
+            try {
+<span class="nc" id="L66">                userService.updateUser(employee);</span>
+<span class="nc" id="L67">                response = new SuccessfulUpdateResponse(resp);</span>
+<span class="nc" id="L68">            } catch (RecordNotExistsException exc) {</span>
+<span class="nc" id="L69">                response = new ServerError(resp);</span>
+<span class="nc" id="L70">            }</span>
+        }
+
+<span class="nc" id="L73">        resp.getWriter().write(this.objectMapper.writeValueAsString(response));</span>
+<span class="nc" id="L74">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

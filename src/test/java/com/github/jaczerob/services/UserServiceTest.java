@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.github.jaczerob.project1.exceptions.RecordAlreadyExistsException;
+import com.github.jaczerob.project1.exceptions.RecordNotExistsException;
 import com.github.jaczerob.project1.models.users.Employee;
 import com.github.jaczerob.project1.models.users.User;
 import com.github.jaczerob.project1.repositories.UserRepository;
@@ -45,7 +46,10 @@ public class UserServiceTest {
     @Test
     public void testRegisterUserSuccess() throws IllegalArgumentException, RecordAlreadyExistsException {
         User user = new Employee(1, "email", "username", "password");
+        Mockito.when(this.userRepository.get(user.getUsername())).thenReturn(Optional.of(user));
+
         this.users.registerUser(user);
+        Assert.assertEquals(user, this.users.getUser(user.getUsername()).get());
     }
 
     @Test(expected=RecordAlreadyExistsException.class)
@@ -97,6 +101,64 @@ public class UserServiceTest {
     public void testRegisterUserFail_whenEmailTooLong() throws IllegalArgumentException, RecordAlreadyExistsException {
         User user = new Employee(1, "meowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeow", "username", "password");
         this.users.registerUser(user);
+    }
+
+    @Test
+    public void testUpdateUserSuccess() throws IllegalArgumentException, RecordNotExistsException {
+        User user = new Employee(1, "email", "username", "password");
+        Mockito.when(this.userRepository.get(user.getUsername())).thenReturn(Optional.of(user));
+        
+        this.users.updateUser(user);
+        Assert.assertEquals(user, this.users.getUser(user.getUsername()).get());
+    }
+
+    @Test(expected=RecordNotExistsException.class)
+    public void testUpdateUserFail_whenRecordNotExists() throws IllegalArgumentException, RecordNotExistsException, RecordNotExistsException {
+        User user = new Employee(1, "email", "username", "password");
+        Mockito.doThrow(RecordNotExistsException.class).when(this.userRepository).update(user);
+        this.users.updateUser(user);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testUpdateUserFail_whenIDLessThanZero() throws IllegalArgumentException, RecordNotExistsException {
+        User user = new Employee(-1, "email", "username", "password");
+        this.users.updateUser(user);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testUpdateUserFail_whenUsernameEmpty() throws IllegalArgumentException, RecordNotExistsException {
+        User user = new Employee(1, "email", "", "password");
+        this.users.updateUser(user);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testUpdateUserFail_whenUsernameTooLong() throws IllegalArgumentException, RecordNotExistsException {
+        User user = new Employee(1, "email", "meowmeowmeowmeowmeowmeowmeowmeowmeow", "password");
+        this.users.updateUser(user);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testUpdateUserFail_whenPasswordEmpty() throws IllegalArgumentException, RecordNotExistsException {
+        User user = new Employee(1, "email", "username", "");
+        this.users.updateUser(user);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testUpdateUserFail_whenPasswordTooLong() throws IllegalArgumentException, RecordNotExistsException {
+        User user = new Employee(1, "email", "username", "meowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeow");
+        this.users.updateUser(user);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testUpdateUserFail_whenEmailEmpty() throws IllegalArgumentException, RecordNotExistsException {
+        User user = new Employee(1, "", "username", "password");
+        this.users.updateUser(user);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testUpdateUserFail_whenEmailTooLong() throws IllegalArgumentException, RecordNotExistsException {
+        User user = new Employee(1, "meowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeowmeow", "username", "password");
+        this.users.updateUser(user);
     }
 
     @Test

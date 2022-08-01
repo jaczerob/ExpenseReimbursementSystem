@@ -14,9 +14,9 @@ import com.github.jaczerob.project1.models.users.User;
 import com.github.jaczerob.project1.services.UserService;
 import com.github.jaczerob.project1.web.responses.Response;
 import com.github.jaczerob.project1.web.responses.common.InvalidParametersResponse;
-import com.github.jaczerob.project1.web.responses.login.AlreadyLoggedInResponse;
-import com.github.jaczerob.project1.web.responses.login.InvalidLoginDetailsResponse;
-import com.github.jaczerob.project1.web.responses.login.SuccessfulLoginResponse;
+import com.github.jaczerob.project1.web.responses.common.login.AlreadyLoggedInResponse;
+import com.github.jaczerob.project1.web.responses.common.login.InvalidLoginDetailsResponse;
+import com.github.jaczerob.project1.web.responses.common.login.SuccessfulLoginResponse;
 import com.github.jaczerob.project1.web.servlets.Servlet;
 
 /**

@@ -6,7 +6,7 @@ import com.github.jaczerob.project1.models.ERSObject;
  * Represents a user
  * @author Jacob
  * @since 0.1
- * @version 0.7
+ * @version 0.12
  */
 public abstract class User extends ERSObject {
     protected String email;
@@ -20,7 +20,7 @@ public abstract class User extends ERSObject {
      * @param username The username of the user
      * @param password The password of the user
      */
-    public User(int id, String email, String username, String password) {
+    protected User(int id, String email, String username, String password) {
 <span class="fc" id="L24">        super(id);</span>
 <span class="fc" id="L25">        this.email = email;</span>
 <span class="fc" id="L26">        this.username = username;</span>
@@ -52,8 +52,13 @@ public abstract class User extends ERSObject {
     }
 
     @Override
+    public int hashCode() {
+<span class="nc" id="L56">        return this.getID();</span>
+    }
+
+    @Override
     public String toString() {
-<span class="nc" id="L56">        return String.format(&quot;User(id=%d, username=%s, email=%s)&quot;, this.getID(), this.getUsername(), this.getEmail());</span>
+<span class="nc" id="L61">        return String.format(&quot;User(id=%d, username=%s, email=%s)&quot;, this.getID(), this.getUsername(), this.getEmail());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

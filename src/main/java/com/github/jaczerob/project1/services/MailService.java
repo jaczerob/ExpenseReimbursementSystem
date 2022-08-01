@@ -16,7 +16,7 @@ import javax.mail.internet.MimeMessage;
  * Represents a service that sends mail from a SMTP server
  * @author Jacob
  * @since 0.5
- * @version 0.5
+ * @version 0.12
  */
 public class MailService {
     private final String username;
@@ -30,6 +30,7 @@ public class MailService {
         username = mailProperties.remove("mail.smtp.username").toString();
         String password = mailProperties.remove("mail.smtp.password").toString();
         this.session = Session.getInstance(mailProperties, new Authenticator() {
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }

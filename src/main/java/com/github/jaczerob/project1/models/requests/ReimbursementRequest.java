@@ -6,7 +6,7 @@ import com.github.jaczerob.project1.models.ERSObject;
  * Represents a reimbursement request
  * @author Jacob
  * @since 0.1
- * @version 0.4
+ * @version 0.12
  */
 public abstract class ReimbursementRequest extends ERSObject {
     private int employeeID;
@@ -20,7 +20,7 @@ public abstract class ReimbursementRequest extends ERSObject {
      * @param amount The amount of the reimbursement
      * @param type The type of the reimbursement
      */
-    public ReimbursementRequest(int id, int employeeID, float amount, String type) {
+    protected ReimbursementRequest(int id, int employeeID, float amount, String type) {
         super(id);
         this.employeeID = employeeID;
         this.amount = amount;
@@ -48,5 +48,10 @@ public abstract class ReimbursementRequest extends ERSObject {
                 this.getAmount() == other.getAmount() &&
                 this.getEmployeeID() == other.getEmployeeID() &&
                 this.getType().equals(other.getType());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getID();
     }
 }

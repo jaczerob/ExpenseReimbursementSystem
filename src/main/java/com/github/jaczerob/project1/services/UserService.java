@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.github.jaczerob.project1.exceptions.RecordAlreadyExistsException;
+import com.github.jaczerob.project1.exceptions.RecordNotExistsException;
 import com.github.jaczerob.project1.models.users.Employee;
 import com.github.jaczerob.project1.models.users.User;
 import com.github.jaczerob.project1.repositories.UserRepository;
@@ -12,7 +13,7 @@ import com.github.jaczerob.project1.repositories.UserRepository;
  * Represents the user service bridge to the repository
  * @author Jacob
  * @since 0.2
- * @version 0.3
+ * @version 0.12
  */
 public class UserService {
     private UserRepository userRepository;
@@ -34,6 +35,25 @@ public class UserService {
     public Optional<User> getUser(String username) throws IllegalArgumentException {
         if (username.isEmpty() || username.length() > 32) throw new IllegalArgumentException("Invalid username");
         return this.userRepository.get(username);
+    }
+
+    /**
+     * Updates an existing user
+     * @param user The user to update
+     * @throws RecordNotExistsException If the user does not exist
+     */
+    public void updateUser(User user) throws RecordNotExistsException {
+        if (
+            user.getID() < 0 || 
+            user.getUsername().isEmpty() || 
+            user.getUsername().length() > 32 ||
+            user.getPassword().isEmpty() ||
+            user.getPassword().length() > 255 ||
+            user.getEmail().isEmpty() ||
+            user.getEmail().length() > 255
+        ) throw new IllegalArgumentException("Invalid properties");
+
+        this.userRepository.update(user);
     }
 
     /**

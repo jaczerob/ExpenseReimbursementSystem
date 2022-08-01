@@ -71,11 +71,6 @@ public class ReimbursementRequestRepositoryTest {
         Statement dropAllObjectsStatement = conn.createStatement();
         dropAllObjectsStatement.execute(dropAllObjectsSQL);
     }
-
-    @Test
-    public void shouldEstablishDBConnection() throws SQLException {
-        dataSource.getConnection();
-    }
     
     @Test
     public void testGetSuccess() throws SQLException {
@@ -153,11 +148,13 @@ public class ReimbursementRequestRepositoryTest {
         ResultSet rs = selectReimbursementRequestStmt.getResultSet();
         Assert.assertTrue(rs.next());
 
-        ReimbursementRequest gotRequest = new PendingReimbursementRequest(
+        ReimbursementRequest gotRequest = new ResolvedReimbursementRequest(
             rs.getInt("reimbursement_request_id"),
             rs.getInt("reimbursement_request_employee_id"),
             rs.getInt("reimbursement_request_amount"),
-            rs.getString("reimbursement_request_type")
+            rs.getString("reimbursement_request_type"),
+            rs.getBoolean("reimbursement_request_approved"), 
+            rs.getInt("reimbursement_request_manager_id")
         );
 
         Assert.assertEquals(approvedRequest, gotRequest);

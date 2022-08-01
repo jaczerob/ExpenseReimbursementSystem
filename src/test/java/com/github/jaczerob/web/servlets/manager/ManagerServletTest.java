@@ -19,7 +19,6 @@ import org.mockito.stubbing.Answer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.jaczerob.project1.models.users.Employee;
 import com.github.jaczerob.project1.web.servlets.manager.ManagerServlet;
 
 public class ManagerServletTest {
@@ -46,13 +45,6 @@ public class ManagerServletTest {
         pw = new PrintWriter(sw);
         Mockito.when(resp.getWriter()).thenReturn(pw);
         Mockito.when(req.getSession(true)).thenReturn(session);
-    }
-
-    @Test
-    public void testShouldSendError_whenNotLoggedIn() throws ServletException, IOException {
-        int wantStatus = HttpServletResponse.SC_UNAUTHORIZED;
-
-        Mockito.when(session.getAttribute("user")).thenReturn(null);
 
         Mockito.doAnswer(new Answer<Void>() {
             @Override
@@ -62,7 +54,14 @@ public class ManagerServletTest {
                 gotStatus = responseStatus;
                 return null;
             }
-        }).when(resp).setStatus(wantStatus);
+        }).when(resp).setStatus(Mockito.anyInt());
+    }
+
+    @Test
+    public void testShouldSendError_whenNotLoggedIn() throws ServletException, IOException {
+        int wantStatus = HttpServletResponse.SC_UNAUTHORIZED;
+
+        Mockito.when(session.getAttribute("user")).thenReturn(null);
 
         managerServlet.service(req, resp);
 
@@ -76,17 +75,7 @@ public class ManagerServletTest {
     public void testShouldSendError_whenUserNotManager() throws ServletException, IOException {
         int wantStatus = HttpServletResponse.SC_UNAUTHORIZED;
 
-        Mockito.when(session.getAttribute("user")).thenReturn(Mockito.mock(Employee.class));
-
-        Mockito.doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                Integer responseStatus = (Integer) args[0];
-                gotStatus = responseStatus;
-                return null;
-            }
-        }).when(resp).setStatus(wantStatus);
+        Mockito.when(session.getAttribute("user")).thenReturn(null);
 
         managerServlet.service(req, resp);
 

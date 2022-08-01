@@ -42,7 +42,10 @@ public class ReimbursementRequestServiceTest {
     @Test
     public void testResolveReimbursementRequestSuccess() throws RecordNotExistsException, IllegalArgumentException {
         PendingReimbursementRequest request = new PendingReimbursementRequest(1, 1, 1f, "money");
+        Mockito.when(this.reimbursementRequestRepository.get(request.getID())).thenReturn(Optional.of(request));
+
         this.reimbursementRequestService.resolveReimbursementRequest(request, true, Mockito.mock(Manager.class));
+        Assert.assertEquals(request, this.reimbursementRequestService.getReimbursementRequest(request.getID()).get());
     }
 
     @Test(expected=IllegalArgumentException.class)
@@ -60,7 +63,10 @@ public class ReimbursementRequestServiceTest {
     @Test
     public void testAddReimbursementRequestSuccess() throws RecordNotExistsException, IllegalArgumentException {
         PendingReimbursementRequest request = new PendingReimbursementRequest(1, 1, 1f, "money");
+        Mockito.when(this.reimbursementRequestRepository.get(request.getID())).thenReturn(Optional.of(request));
+        
         this.reimbursementRequestService.addReimbursementRequest(request);
+        Assert.assertEquals(request, this.reimbursementRequestService.getReimbursementRequest(request.getID()).get());
     }
 
     @Test(expected=IllegalArgumentException.class)

@@ -2,20 +2,26 @@
 
 import java.io.IOException;
 
+import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jaczerob.project1.exceptions.RecordAlreadyExistsException;
 import com.github.jaczerob.project1.models.users.Employee;
+import com.github.jaczerob.project1.services.MailService;
 import com.github.jaczerob.project1.services.UserService;
 import com.github.jaczerob.project1.web.responses.Response;
 import com.github.jaczerob.project1.web.responses.common.InvalidParametersResponse;
-import com.github.jaczerob.project1.web.responses.register.InvalidRegistrationDetailsResponse;
-import com.github.jaczerob.project1.web.responses.register.LoginDetailsExistResponse;
-import com.github.jaczerob.project1.web.responses.register.SuccessfulRegistrationResponse;
+import com.github.jaczerob.project1.web.responses.common.ServerError;
+import com.github.jaczerob.project1.web.responses.manager.register.InvalidRegistrationDetailsResponse;
+import com.github.jaczerob.project1.web.responses.manager.register.LoginDetailsExistResponse;
+import com.github.jaczerob.project1.web.responses.manager.register.SuccessfulRegistrationResponse;
 
 /**
  * A servlet exposing the /register endpoint for registering users
@@ -24,41 +30,54 @@ import com.github.jaczerob.project1.web.responses.register.SuccessfulRegistratio
  * @version 0.9
  */
 @WebServlet(name=&quot;RegisterServlet&quot;, urlPatterns={&quot;/register&quot;})
-<span class="fc" id="L27">public class RegisterServlet extends ManagerServlet {</span>
+<span class="fc" id="L33">public class RegisterServlet extends ManagerServlet {</span>
+<span class="fc" id="L34">    private static Logger logger = LogManager.getLogger(RegisterServlet.class);</span>
+    
     private ObjectMapper objectMapper;
     private UserService userService;
+    private MailService mailService;
 
     @Override
     public void init() throws ServletException {
-<span class="fc" id="L33">        objectMapper = (ObjectMapper) this.getServletContext().getAttribute(&quot;objectMapper&quot;);</span>
-<span class="fc" id="L34">        userService = (UserService) this.getServletContext().getAttribute(&quot;userService&quot;);</span>
-<span class="fc" id="L35">        super.init();</span>
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L42">        objectMapper = (ObjectMapper) this.getServletContext().getAttribute(&quot;objectMapper&quot;);</span>
+<span class="fc" id="L43">        userService = (UserService) this.getServletContext().getAttribute(&quot;userService&quot;);</span>
+<span class="fc" id="L44">        mailService = (MailService) this.getServletContext().getAttribute(&quot;mailService&quot;);</span>
+<span class="fc" id="L45">        super.init();</span>
+<span class="fc" id="L46">    }</span>
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-<span class="fc" id="L40">        String username = req.getParameter(&quot;username&quot;);</span>
-<span class="fc" id="L41">        String email = req.getParameter(&quot;email&quot;);</span>
+<span class="fc" id="L50">        String username = req.getParameter(&quot;username&quot;);</span>
+<span class="fc" id="L51">        String email = req.getParameter(&quot;email&quot;);</span>
 
-<span class="fc" id="L43">        resp.setContentType(&quot;application/json&quot;);</span>
         Response response;
 
-<span class="pc bpc" id="L46" title="1 of 4 branches missed.">        if (username != null &amp;&amp; email != null) {</span>
-<span class="fc" id="L47">            Employee employee = new Employee(0, username, email, &quot;password&quot;);</span>
+<span class="pc bpc" id="L55" title="1 of 4 branches missed.">        if (username != null &amp;&amp; email != null) {</span>
+<span class="fc" id="L56">            String tempPassword = &quot;password&quot;;</span>
+<span class="fc" id="L57">            Employee employee = new Employee(0, email, username, tempPassword);</span>
 
             try {
-<span class="fc" id="L50">                this.userService.registerUser(employee);</span>
-<span class="fc" id="L51">                response = new SuccessfulRegistrationResponse(resp);</span>
-<span class="fc" id="L52">            } catch (RecordAlreadyExistsException e) {</span>
-<span class="fc" id="L53">                response = new LoginDetailsExistResponse(resp);</span>
-<span class="fc" id="L54">            } catch (IllegalArgumentException e) {</span>
-<span class="fc" id="L55">                response = new InvalidRegistrationDetailsResponse(resp);</span>
-<span class="fc" id="L56">            }</span>
-<span class="fc" id="L57">        } else {</span>
-<span class="fc" id="L58">            response = new InvalidParametersResponse(resp, &quot;username&quot;, &quot;email&quot;);</span>
+<span class="fc" id="L60">                this.userService.registerUser(employee);</span>
+<span class="fc" id="L61">                this.mailService.sendEmail(</span>
+                    email, 
+<span class="fc" id="L63">                    String.format(&quot;Welcome to ERS, %s&quot;, username), </span>
+<span class="fc" id="L64">                    String.format(&quot;Your temporary password is %s. Please change this using the /info/update endpoint and providing a new password form.&quot;, tempPassword)</span>
+                );
+                
+<span class="fc" id="L67">                response = new SuccessfulRegistrationResponse(resp);</span>
+<span class="fc" id="L68">            } catch (RecordAlreadyExistsException e) {</span>
+<span class="fc" id="L69">                response = new LoginDetailsExistResponse(resp);</span>
+<span class="fc" id="L70">            } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L71">                response = new InvalidRegistrationDetailsResponse(resp);</span>
+<span class="nc" id="L72">            } catch (MessagingException e) {</span>
+<span class="nc" id="L73">                logger.error(&quot;error in the mail service&quot;, e);</span>
+<span class="nc" id="L74">                response = new ServerError(resp);</span>
+<span class="fc" id="L75">            }</span>
+<span class="fc" id="L76">        } else {</span>
+<span class="fc" id="L77">            response = new InvalidParametersResponse(resp, &quot;username&quot;, &quot;email&quot;);</span>
         }
 
-<span class="fc" id="L61">        resp.getWriter().write(this.objectMapper.writeValueAsString(response));</span>
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L80">        resp.getWriter().write(this.objectMapper.writeValueAsString(response));</span>
+<span class="fc" id="L81">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

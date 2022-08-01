@@ -62,5 +62,7 @@ public class ContextListener implements ServletContextListener {
     }
 
     @Override
-    public void contextDestroyed(ServletContextEvent servletContextEvent) { }
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+        logger.info("destroying context");
+    }
 }

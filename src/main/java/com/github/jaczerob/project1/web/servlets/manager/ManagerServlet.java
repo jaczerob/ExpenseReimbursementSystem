@@ -24,7 +24,7 @@ public abstract class ManagerServlet extends Servlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(true);
-        if (session.getAttribute("user") == null || !(session.getAttribute("user") instanceof Manager)) {
+        if (!(session.getAttribute("user") instanceof Manager)) {
             Response response = new NotAuthorizedResponse(resp);
             resp.getWriter().write(new ObjectMapper().writeValueAsString(response));
             return;

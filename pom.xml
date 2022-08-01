@@ -6,12 +6,11 @@
 
   <groupId>com.github.jaczerob</groupId>
   <artifactId>project1</artifactId>
-  <version>0.11</version>
+  <version>0.12</version>
   <packaging>war</packaging>
 
   <name>project1</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>https://github.com/jaczerob/project1</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -6,7 +6,7 @@ import com.github.jaczerob.project1.models.ERSObject;
  * Represents a reimbursement request
  * @author Jacob
  * @since 0.1
- * @version 0.4
+ * @version 0.12
  */
 public abstract class ReimbursementRequest extends ERSObject {
     private int employeeID;
@@ -20,7 +20,7 @@ public abstract class ReimbursementRequest extends ERSObject {
      * @param amount The amount of the reimbursement
      * @param type The type of the reimbursement
      */
-    public ReimbursementRequest(int id, int employeeID, float amount, String type) {
+    protected ReimbursementRequest(int id, int employeeID, float amount, String type) {
 <span class="fc" id="L24">        super(id);</span>
 <span class="fc" id="L25">        this.employeeID = employeeID;</span>
 <span class="fc" id="L26">        this.amount = amount;</span>
@@ -48,6 +48,11 @@ public abstract class ReimbursementRequest extends ERSObject {
 <span class="pc bpc" id="L48" title="1 of 2 branches missed.">                this.getAmount() == other.getAmount() &amp;&amp;</span>
 <span class="pc bpc" id="L49" title="1 of 2 branches missed.">                this.getEmployeeID() == other.getEmployeeID() &amp;&amp;</span>
 <span class="pc bpc" id="L50" title="1 of 2 branches missed.">                this.getType().equals(other.getType());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L55">        return this.getID();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

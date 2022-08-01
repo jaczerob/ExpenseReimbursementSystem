@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Map;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -22,6 +24,7 @@ import org.mockito.stubbing.Answer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jaczerob.project1.exceptions.RecordAlreadyExistsException;
+import com.github.jaczerob.project1.services.MailService;
 import com.github.jaczerob.project1.services.UserService;
 import com.github.jaczerob.project1.web.servlets.manager.RegisterServlet;
 
@@ -33,6 +36,7 @@ public class RegisterServletTest {
     HttpServletResponse resp;
     HttpSession session;
     UserService userService;
+    MailService mailService;
     
     int gotStatus;
     StringWriter sw;
@@ -43,6 +47,7 @@ public class RegisterServletTest {
     public void init() throws IOException, ServletException {
         registerServlet = Mockito.spy(new RegisterServlet());
         userService = Mockito.mock(UserService.class);
+        mailService = Mockito.mock(MailService.class);
         config = Mockito.mock(ServletConfig.class);
         context = Mockito.mock(ServletContext.class);
         req = Mockito.mock(HttpServletRequest.class);
@@ -57,19 +62,11 @@ public class RegisterServletTest {
         Mockito.doReturn(config).when(registerServlet).getServletConfig();
         Mockito.doReturn(context).when(registerServlet).getServletContext();
         Mockito.when(context.getAttribute("userService")).thenReturn(userService);
+        Mockito.when(context.getAttribute("mailService")).thenReturn(mailService);
         Mockito.when(context.getAttribute("objectMapper")).thenReturn(mapper);
         registerServlet.init();
         
         Mockito.when(resp.getWriter()).thenReturn(pw);
-    }
-
-    @Test
-    public void testRegisterSuccess() throws IllegalArgumentException, RecordAlreadyExistsException, ServletException, IOException {
-        int wantStatus = HttpServletResponse.SC_OK;
-        
-        Mockito.when(req.getParameter("email")).thenReturn("");
-        Mockito.when(req.getParameter("username")).thenReturn("");
-        Mockito.doNothing().when(userService).registerUser(Mockito.any());
 
         Mockito.doAnswer(new Answer<Void>() {
             @Override
@@ -79,7 +76,17 @@ public class RegisterServletTest {
                 gotStatus = responseStatus;
                 return null;
             }
-        }).when(resp).setStatus(wantStatus);
+        }).when(resp).setStatus(Mockito.anyInt());
+    }
+
+    @Test
+    public void testRegisterSuccess() throws IllegalArgumentException, RecordAlreadyExistsException, ServletException, IOException, AddressException, MessagingException {
+        int wantStatus = HttpServletResponse.SC_OK;
+        
+        Mockito.when(req.getParameter("email")).thenReturn("");
+        Mockito.when(req.getParameter("username")).thenReturn("");
+        Mockito.doNothing().when(userService).registerUser(Mockito.any());
+        Mockito.doNothing().when(mailService).sendEmail(Mockito.any(), Mockito.any(), Mockito.any());
 
         registerServlet.doPost(req, resp);
 
@@ -95,16 +102,6 @@ public class RegisterServletTest {
 
         Mockito.when(req.getParameter("username")).thenReturn(null);
         Mockito.when(req.getParameter("email")).thenReturn(null);
-        
-        Mockito.doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                Integer responseStatus = (Integer) args[0];
-                gotStatus = responseStatus;
-                return null;
-            }
-        }).when(resp).setStatus(wantStatus);
 
         registerServlet.doPost(req, resp);
 
@@ -121,16 +118,6 @@ public class RegisterServletTest {
         Mockito.when(req.getParameter("username")).thenReturn("");
         Mockito.when(req.getParameter("email")).thenReturn("");
         Mockito.doThrow(RecordAlreadyExistsException.class).when(userService).registerUser(Mockito.any());
-        
-        Mockito.doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                Integer responseStatus = (Integer) args[0];
-                gotStatus = responseStatus;
-                return null;
-            }
-        }).when(resp).setStatus(wantStatus);
 
         registerServlet.doPost(req, resp);
 
@@ -147,16 +134,6 @@ public class RegisterServletTest {
         Mockito.when(req.getParameter("username")).thenReturn("");
         Mockito.when(req.getParameter("email")).thenReturn("");
         Mockito.doThrow(IllegalArgumentException.class).when(userService).registerUser(Mockito.any());
-        
-        Mockito.doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                Integer responseStatus = (Integer) args[0];
-                gotStatus = responseStatus;
-                return null;
-            }
-        }).when(resp).setStatus(wantStatus);
 
         registerServlet.doPost(req, resp);
 

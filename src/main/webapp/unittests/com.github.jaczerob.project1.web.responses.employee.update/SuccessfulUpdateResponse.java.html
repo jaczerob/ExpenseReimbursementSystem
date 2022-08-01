@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SuccessfulUpdateResponse.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project1</a> &gt; <a href="index.source.html" class="el_package">com.github.jaczerob.project1.web.responses.employee.update</a> &gt; <span class="el_source">SuccessfulUpdateResponse.java</span></div><h1>SuccessfulUpdateResponse.java</h1><pre class="source lang-java linenums">package com.github.jaczerob.project1.web.responses.employee.update;
+
+import javax.servlet.http.HttpServletResponse;
+
+import com.github.jaczerob.project1.web.responses.Response;
+
+/**
+ * Represents a HTTP response if a user successfully updates their information.
+ * @author Jacob
+ * @since 0.12
+ * @version 0.12
+ */
+public class SuccessfulUpdateResponse extends Response {
+    /**
+     * Constructs a new SuccessfulUpdateResponse
+     * Sets the status code to 200 (OK)
+     * @param resp The raw HTTP response
+     */
+<span class="nc" id="L19">    public SuccessfulUpdateResponse(HttpServletResponse resp) {</span>
+<span class="nc" id="L20">        resp.setStatus(HttpServletResponse.SC_OK);</span>
+<span class="nc" id="L21">        this.setMessage(&quot;Your information has been updated. To view your information, invoke the /info endpoint.&quot;);</span>
+<span class="nc" id="L22">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

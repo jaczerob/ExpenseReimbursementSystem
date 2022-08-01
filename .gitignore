@@ -5,3 +5,4 @@ mail.properties
 target/
 logs/
 *.aws.yaml
+deploy.*.sh

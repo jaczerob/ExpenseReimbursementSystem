@@ -23,10 +23,19 @@ import com.github.jaczerob.project1.models.requests.ResolvedReimbursementRequest
  * Represents a repository interface for accessing and managing reimbursement requests
  * @author Jacob
  * @since 0.1
- * @version 0.4
+ * @version 0.12
  */
 public class ReimbursementRequestRepository implements IRepository<ReimbursementRequest, Integer> {
     private static Logger logger = LogManager.getLogger(ReimbursementRequestRepository.class);
+
+    // column names
+    private static final String REIMBURSEMENT_REQUEST_ID = "reimbursement_request_id";
+    private static final String REIMBURSEMENT_REQUEST_EMPLOYEE_ID = "reimbursement_request_employee_id";
+    private static final String REIMBURSEMENT_REQUEST_AMOUNT = "reimbursement_request_amount";
+    private static final String REIMBURSEMENT_REQUEST_TYPE = "reimbursement_request_type";
+    private static final String REIMBURSEMENT_REQUEST_PENDING = "reimbursement_request_pending";
+    private static final String REIMBURSEMENT_REQUEST_APPROVED = "reimbursement_request_approved";
+    private static final String REIMBURSEMENT_REQUEST_MANAGER_ID = "reimbursement_request_manager_id";
     
     private DataSource dataSource;
 
@@ -51,13 +60,13 @@ public class ReimbursementRequestRepository implements IRepository<Reimbursement
             
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                int requestID = rs.getInt("reimbursement_request_id");
-                int employeeID = rs.getInt("reimbursement_request_employee_id");
-                float amount = rs.getInt("reimbursement_request_amount");
-                String type = rs.getString("reimbursement_request_type");
+                int requestID = rs.getInt(REIMBURSEMENT_REQUEST_ID);
+                int employeeID = rs.getInt(REIMBURSEMENT_REQUEST_EMPLOYEE_ID);
+                float amount = rs.getInt(REIMBURSEMENT_REQUEST_AMOUNT);
+                String type = rs.getString(REIMBURSEMENT_REQUEST_TYPE);
                 
-                if (rs.getBoolean("reimbursement_request_pending")) {
-                    reimbursementRequest = new ResolvedReimbursementRequest(requestID, employeeID, amount, type, rs.getBoolean("reimbursement_request_approved"), rs.getInt("reimbursement_request_manager_id"));
+                if (rs.getBoolean(REIMBURSEMENT_REQUEST_PENDING)) {
+                    reimbursementRequest = new ResolvedReimbursementRequest(requestID, employeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID));
                 } else {
                     reimbursementRequest = new PendingReimbursementRequest(requestID, employeeID, amount, type);
                 }
@@ -136,15 +145,16 @@ public class ReimbursementRequestRepository implements IRepository<Reimbursement
             
             ResultSet rs = ps.getResultSet();
             
-            int requestID, employeeID;
+            int requestID;
+            int employeeID;
             float amount;
             String type;
             
             while (rs.next()) {
-                requestID = rs.getInt("reimbursement_request_id");
-                employeeID = rs.getInt("reimbursement_request_employee_id");
-                amount = rs.getInt("reimbursement_request_amount");
-                type = rs.getString("reimbursement_request_type");
+                requestID = rs.getInt(REIMBURSEMENT_REQUEST_ID);
+                employeeID = rs.getInt(REIMBURSEMENT_REQUEST_EMPLOYEE_ID);
+                amount = rs.getInt(REIMBURSEMENT_REQUEST_AMOUNT);
+                type = rs.getString(REIMBURSEMENT_REQUEST_TYPE);
 
                 reimbursementRequests.add(new PendingReimbursementRequest(requestID, employeeID, amount, type));
             }
@@ -173,18 +183,19 @@ public class ReimbursementRequestRepository implements IRepository<Reimbursement
             
             ResultSet rs = ps.getResultSet();
             
-            int requestID, gotEmployeeID;
+            int requestID;
+            int gotEmployeeID;
             float amount;
             String type;
             
             while (rs.next()) {
-                requestID = rs.getInt("reimbursement_request_id");
-                gotEmployeeID = rs.getInt("reimbursement_request_employee_id");
-                amount = rs.getInt("reimbursement_request_amount");
-                type = rs.getString("reimbursement_request_type");
-
-                if (rs.getBoolean("reimbursement_request_pending")) {
-                    reimbursementRequests.add(new ResolvedReimbursementRequest(requestID, gotEmployeeID, amount, type, rs.getBoolean("reimbursement_request_approved"), rs.getInt("reimbursement_request_manager_id")));
+                requestID = rs.getInt(REIMBURSEMENT_REQUEST_ID);
+                gotEmployeeID = rs.getInt(REIMBURSEMENT_REQUEST_EMPLOYEE_ID);
+                amount = rs.getInt(REIMBURSEMENT_REQUEST_AMOUNT);
+                type = rs.getString(REIMBURSEMENT_REQUEST_TYPE);
+                
+                if (rs.getBoolean(REIMBURSEMENT_REQUEST_PENDING)) {
+                    reimbursementRequests.add(new ResolvedReimbursementRequest(requestID, gotEmployeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID)));
                 } else {
                     reimbursementRequests.add(new PendingReimbursementRequest(requestID, gotEmployeeID, amount, type));
                 }

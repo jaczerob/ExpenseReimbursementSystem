@@ -67,6 +67,16 @@ public class LoginServletTest {
         Mockito.when(req.getSession(true)).thenReturn(session);
         
         loginServlet.init();
+
+        Mockito.doAnswer(new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                Integer responseStatus = (Integer) args[0];
+                gotStatus = responseStatus;
+                return null;
+            }
+        }).when(resp).setStatus(Mockito.anyInt());
     }
 
     @Test
@@ -78,16 +88,6 @@ public class LoginServletTest {
         Mockito.when(req.getParameter("password")).thenReturn(user.getPassword());
         Mockito.when(session.getAttribute("user")).thenReturn(null);
         Mockito.when(userService.loginUser(user.getUsername(), user.getPassword())).thenReturn(Optional.of(user));
-        
-        Mockito.doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                Integer responseStatus = (Integer) args[0];
-                gotStatus = responseStatus;
-                return null;
-            }
-        }).when(resp).setStatus(wantStatus);
 
         Mockito.doAnswer(new Answer<Void>() {
             @Override
@@ -116,16 +116,6 @@ public class LoginServletTest {
         Mockito.when(req.getParameter("username")).thenReturn(null);
         Mockito.when(req.getParameter("password")).thenReturn(null);
 
-        Mockito.doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                Integer responseStatus = (Integer) args[0];
-                gotStatus = responseStatus;
-                return null;
-            }
-        }).when(resp).setStatus(wantStatus);
-
         loginServlet.doPost(req, resp);
 
         pw.flush();
@@ -141,16 +131,6 @@ public class LoginServletTest {
         Mockito.when(req.getParameter("username")).thenReturn("");
         Mockito.when(req.getParameter("password")).thenReturn("");
         Mockito.when(session.getAttribute("user")).thenReturn("");
-
-        Mockito.doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                Integer responseStatus = (Integer) args[0];
-                gotStatus = responseStatus;
-                return null;
-            }
-        }).when(resp).setStatus(wantStatus);
 
         loginServlet.doPost(req, resp);
 
@@ -169,16 +149,6 @@ public class LoginServletTest {
         Mockito.when(req.getParameter("password")).thenReturn(user.getPassword());
         Mockito.when(session.getAttribute("user")).thenReturn(null);
         Mockito.when(userService.loginUser(user.getUsername(), user.getPassword())).thenReturn(Optional.empty());
-        
-        Mockito.doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                Integer responseStatus = (Integer) args[0];
-                gotStatus = responseStatus;
-                return null;
-            }
-        }).when(resp).setStatus(wantStatus);
 
         loginServlet.doPost(req, resp);
 
@@ -197,16 +167,6 @@ public class LoginServletTest {
         Mockito.when(req.getParameter("password")).thenReturn(user.getPassword());
         Mockito.when(session.getAttribute("user")).thenReturn(null);
         Mockito.when(userService.loginUser(user.getUsername(), user.getPassword())).thenThrow(IllegalArgumentException.class);
-        
-        Mockito.doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                Integer responseStatus = (Integer) args[0];
-                gotStatus = responseStatus;
-                return null;
-            }
-        }).when(resp).setStatus(wantStatus);
 
         loginServlet.doPost(req, resp);
 
