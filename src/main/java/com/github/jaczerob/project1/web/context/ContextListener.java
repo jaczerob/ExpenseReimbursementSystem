@@ -27,7 +27,7 @@ import com.github.jaczerob.project1.services.UserService;
  * Represents the context listener for the servlets
  * @author Jacob
  * @since 0.2
- * @version 0.9
+ * @version 0.13
  */
 @WebListener()
 public class ContextListener implements ServletContextListener {
@@ -38,6 +38,8 @@ public class ContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
+        logger.info("database URL = {}", servletContextEvent.getServletContext().getInitParameter("jdbcUrl"));
+
         ObjectMapper objectMapper = new ObjectMapper();
         servletContextEvent.getServletContext().setAttribute("objectMapper", objectMapper);
 

@@ -14,7 +14,7 @@ import com.github.jaczerob.project1.models.users.Manager;
  * Represents the reimbursement request service bridge to the repository
  * @author Jacob
  * @since 0.2
- * @version 0.3
+ * @version 0.13
  */
 public class ReimbursementRequestService {
     private ReimbursementRequestRepository reimbursementRequestRepository;
@@ -92,5 +92,25 @@ public class ReimbursementRequestService {
     public List<ReimbursementRequest> getAllEmployeeReimbursements(int employeeID) throws IllegalArgumentException {
         if (employeeID < 0) throw new IllegalArgumentException("Invalid id");
         return this.reimbursementRequestRepository.getAllFromEmployee(employeeID);
+    }
+
+    /**
+     * Gets all pending reimbursement requests from an employee
+     * @return The list of resolved reimbursement requests 
+     * @throws IllegalArgumentException If the ID is less than 0
+     */
+    public List<ReimbursementRequest> getAllPendingEmployeeReimbursements(int employeeID) throws IllegalArgumentException {
+        if (employeeID < 0) throw new IllegalArgumentException("Invalid id");
+        return this.reimbursementRequestRepository.getAllFromEmployee(employeeID, true);
+    }
+
+    /**
+     * Gets all resolved reimbursement requests from an employee
+     * @return The list of resolved reimbursement requests 
+     * @throws IllegalArgumentException If the ID is less than 0
+     */
+    public List<ReimbursementRequest> getAllResolvedEmployeeReimbursements(int employeeID) throws IllegalArgumentException {
+        if (employeeID < 0) throw new IllegalArgumentException("Invalid id");
+        return this.reimbursementRequestRepository.getAllFromEmployee(employeeID, false);
     }
 }

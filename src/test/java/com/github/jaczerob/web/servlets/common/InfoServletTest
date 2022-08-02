@@ -23,7 +23,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jaczerob.project1.models.users.Employee;
 import com.github.jaczerob.project1.models.users.User;
-import com.github.jaczerob.project1.web.servlets.common.InfoServlet;
+import com.github.jaczerob.project1.web.servlets.employee.InfoServlet;
 
 public class InfoServletTest {
     InfoServlet infoServlet;

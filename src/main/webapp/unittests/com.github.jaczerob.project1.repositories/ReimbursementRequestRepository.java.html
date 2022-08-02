@@ -23,7 +23,7 @@ import com.github.jaczerob.project1.models.requests.ResolvedReimbursementRequest
  * Represents a repository interface for accessing and managing reimbursement requests
  * @author Jacob
  * @since 0.1
- * @version 0.12
+ * @version 0.13
  */
 public class ReimbursementRequestRepository implements IRepository&lt;ReimbursementRequest, Integer&gt; {
 <span class="fc" id="L29">    private static Logger logger = LogManager.getLogger(ReimbursementRequestRepository.class);</span>
@@ -72,7 +72,7 @@ public class ReimbursementRequestRepository implements IRepository&lt;Reimbursem
                 }
             }
 <span class="nc" id="L74">        } catch (SQLException exc) {</span>
-<span class="nc" id="L75">            logger.warn(&quot;error with reimbursement_requests get request&quot;, exc);</span>
+<span class="nc" id="L75">            logger.error(&quot;error with reimbursement_requests get request&quot;, exc);</span>
 <span class="fc" id="L76">        }</span>
 
 <span class="fc" id="L78">        return Optional.ofNullable(reimbursementRequest);</span>
@@ -98,7 +98,7 @@ public class ReimbursementRequestRepository implements IRepository&lt;Reimbursem
 <span class="fc" id="L98">            int rows = ps.executeUpdate();</span>
 <span class="pc bpc" id="L99" title="1 of 2 branches missed.">            if (rows &lt; 1) throw new RecordNotExistsException();</span>
 <span class="nc" id="L100">        } catch (SQLException exc) {</span>
-<span class="nc" id="L101">            logger.warn(&quot;error with reimbursement_requests get request&quot;, exc);</span>
+<span class="nc" id="L101">            logger.error(&quot;error with reimbursement_requests update request&quot;, exc);</span>
 <span class="fc" id="L102">        }</span>
 <span class="fc" id="L103">    }</span>
 
@@ -122,7 +122,7 @@ public class ReimbursementRequestRepository implements IRepository&lt;Reimbursem
 <span class="fc" id="L122">            ps.setNull(6, Types.INTEGER);</span>
 <span class="fc" id="L123">            ps.executeUpdate();</span>
 <span class="nc" id="L124">        } catch (SQLException exc) {</span>
-<span class="nc" id="L125">            logger.warn(&quot;error with reimbursement_requests insert request&quot;, exc);</span>
+<span class="nc" id="L125">            logger.error(&quot;error with reimbursement_requests insert request&quot;, exc);</span>
 <span class="fc" id="L126">        }</span>
 <span class="fc" id="L127">    }</span>
 
@@ -159,7 +159,7 @@ public class ReimbursementRequestRepository implements IRepository&lt;Reimbursem
 <span class="fc" id="L159">                reimbursementRequests.add(new PendingReimbursementRequest(requestID, employeeID, amount, type));</span>
             }
 <span class="nc" id="L161">        } catch (SQLException exc) {</span>
-<span class="nc" id="L162">            logger.warn(&quot;error with reimbursement_requests update request&quot;, exc);</span>
+<span class="nc" id="L162">            logger.error(&quot;error with reimbursement_requests get request&quot;, exc);</span>
 <span class="fc" id="L163">        }</span>
 
 <span class="fc" id="L165">        return reimbursementRequests;</span>
@@ -201,10 +201,54 @@ public class ReimbursementRequestRepository implements IRepository&lt;Reimbursem
                 }
             }
 <span class="nc" id="L203">        } catch (SQLException exc) {</span>
-<span class="nc" id="L204">            logger.warn(&quot;error with reimbursement_requests update request&quot;, exc);</span>
+<span class="nc" id="L204">            logger.error(&quot;error with reimbursement_requests get request&quot;, exc);</span>
 <span class="fc" id="L205">        }</span>
 
 <span class="fc" id="L207">        return reimbursementRequests;</span>
+    }
+
+    /**
+     * Gets all reimbursement requests from an employee by pending status
+     * @param employeeID The employee's ID
+     * @param isPending Whether the request is pending
+     * @return A list of reimbursement requests from the employee
+     */
+    public List&lt;ReimbursementRequest&gt; getAllFromEmployee(int employeeID, boolean isPending) {
+<span class="nc" id="L217">        List&lt;ReimbursementRequest&gt; reimbursementRequests = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L218">        String sql = &quot;SELECT * FROM reimbursement_requests WHERE reimbursement_request_employee_id = ? AND reimbursement_request_pending = ?;&quot;;</span>
+
+<span class="nc" id="L220">        try (</span>
+<span class="nc" id="L221">            Connection conn = this.dataSource.getConnection();</span>
+<span class="nc" id="L222">            PreparedStatement ps = conn.prepareStatement(sql)</span>
+        ) {
+<span class="nc" id="L224">            ps.setInt(1, employeeID);</span>
+<span class="nc" id="L225">            ps.setBoolean(2, isPending);</span>
+<span class="nc" id="L226">            ps.execute();</span>
+            
+<span class="nc" id="L228">            ResultSet rs = ps.getResultSet();</span>
+            
+            int requestID;
+            int gotEmployeeID;
+            float amount;
+            String type;
+            
+<span class="nc bnc" id="L235" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L236">                requestID = rs.getInt(REIMBURSEMENT_REQUEST_ID);</span>
+<span class="nc" id="L237">                gotEmployeeID = rs.getInt(REIMBURSEMENT_REQUEST_EMPLOYEE_ID);</span>
+<span class="nc" id="L238">                amount = rs.getInt(REIMBURSEMENT_REQUEST_AMOUNT);</span>
+<span class="nc" id="L239">                type = rs.getString(REIMBURSEMENT_REQUEST_TYPE);</span>
+                
+<span class="nc bnc" id="L241" title="All 2 branches missed.">                if (rs.getBoolean(REIMBURSEMENT_REQUEST_PENDING)) {</span>
+<span class="nc" id="L242">                    reimbursementRequests.add(new ResolvedReimbursementRequest(requestID, gotEmployeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID)));</span>
+                } else {
+<span class="nc" id="L244">                    reimbursementRequests.add(new PendingReimbursementRequest(requestID, gotEmployeeID, amount, type));</span>
+                }
+            }
+<span class="nc" id="L247">        } catch (SQLException exc) {</span>
+<span class="nc" id="L248">            logger.error(&quot;error with reimbursement_requests get request&quot;, exc);</span>
+<span class="nc" id="L249">        }</span>
+
+<span class="nc" id="L251">        return reimbursementRequests;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

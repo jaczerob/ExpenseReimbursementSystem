@@ -32,19 +32,19 @@ public abstract class Servlet extends HttpServlet {
         StringBuilder formatParams = new StringBuilder();
         for (Entry<String, String[]> entry : req.getParameterMap().entrySet()) {
             if (entry.getKey().equals("password")) {
-                formatParams.append("*****");
+                formatParams.append(String.format("%s=******", entry.getKey()));
             } else {
-                formatParams.append(String.join(" "));
+                formatParams.append(String.format("%s=%s", entry.getKey(), String.join(" ", entry.getValue())));
             }
 
-            formatParams.append(" ");
+            formatParams.append("&");
         }
-        
-        String formattedParams = formatParams.toString().trim();
+
+        String formattedParams = formatParams.toString();
         if (formattedParams.isEmpty()) {
             logger.info("servicing {} method to URL {}", req.getMethod(), req.getRequestURL());
         } else {
-            logger.info("servicing {} method to URL {} with parameters: {}", req.getMethod(), req.getRequestURL(), formatParams);
+            logger.info("servicing {} method to URL {} with parameters: {}", req.getMethod(), req.getRequestURL(), formatParams.substring(0, formatParams.length() - 1));
         }
 
         if (req.getMethod().equalsIgnoreCase("PATCH")) {

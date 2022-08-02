@@ -14,7 +14,7 @@ import com.github.jaczerob.project1.models.users.Manager;
  * Represents the reimbursement request service bridge to the repository
  * @author Jacob
  * @since 0.2
- * @version 0.3
+ * @version 0.13
  */
 public class ReimbursementRequestService {
     private ReimbursementRequestRepository reimbursementRequestRepository;
@@ -92,6 +92,26 @@ public class ReimbursementRequestService {
     public List&lt;ReimbursementRequest&gt; getAllEmployeeReimbursements(int employeeID) throws IllegalArgumentException {
 <span class="pc bpc" id="L93" title="1 of 2 branches missed.">        if (employeeID &lt; 0) throw new IllegalArgumentException(&quot;Invalid id&quot;);</span>
 <span class="fc" id="L94">        return this.reimbursementRequestRepository.getAllFromEmployee(employeeID);</span>
+    }
+
+    /**
+     * Gets all pending reimbursement requests from an employee
+     * @return The list of resolved reimbursement requests 
+     * @throws IllegalArgumentException If the ID is less than 0
+     */
+    public List&lt;ReimbursementRequest&gt; getAllPendingEmployeeReimbursements(int employeeID) throws IllegalArgumentException {
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (employeeID &lt; 0) throw new IllegalArgumentException(&quot;Invalid id&quot;);</span>
+<span class="nc" id="L104">        return this.reimbursementRequestRepository.getAllFromEmployee(employeeID, true);</span>
+    }
+
+    /**
+     * Gets all resolved reimbursement requests from an employee
+     * @return The list of resolved reimbursement requests 
+     * @throws IllegalArgumentException If the ID is less than 0
+     */
+    public List&lt;ReimbursementRequest&gt; getAllResolvedEmployeeReimbursements(int employeeID) throws IllegalArgumentException {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        if (employeeID &lt; 0) throw new IllegalArgumentException(&quot;Invalid id&quot;);</span>
+<span class="nc" id="L114">        return this.reimbursementRequestRepository.getAllFromEmployee(employeeID, false);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

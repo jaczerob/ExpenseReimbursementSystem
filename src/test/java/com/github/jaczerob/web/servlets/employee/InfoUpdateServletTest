@@ -3,7 +3,6 @@ package com.github.jaczerob.web.servlets.employee;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Map;
@@ -11,6 +10,7 @@ import java.util.Map;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -37,7 +37,8 @@ public class InfoUpdateServletTest {
     HttpServletResponse resp;
     HttpSession session;
     UserService userService;
-    InputStream inputStream;
+    ByteArrayInputStream byteArrayInputStream;
+    ServletInputStream inputStream;
     BufferedReader bufferedReader;
     
     int gotStatus;
@@ -46,7 +47,7 @@ public class InfoUpdateServletTest {
     ObjectMapper mapper;
 
     @Before
-    public void init() throws IOException, ServletException {
+    public <T> void init() throws IOException, ServletException {
         infoUpdateServlet = Mockito.spy(new InfoUpdateServlet());
         userService = Mockito.mock(UserService.class);
         config = Mockito.mock(ServletConfig.class);
@@ -54,8 +55,8 @@ public class InfoUpdateServletTest {
         req = Mockito.mock(HttpServletRequest.class);
         resp = Mockito.mock(HttpServletResponse.class);
         session = Mockito.mock(HttpSession.class);
+        inputStream = Mockito.mock(ServletInputStream.class, Mockito.CALLS_REAL_METHODS);
         bufferedReader = Mockito.mock(BufferedReader.class);
-
         
         gotStatus = -1;
         sw = new StringWriter();
@@ -67,9 +68,11 @@ public class InfoUpdateServletTest {
         Mockito.when(context.getAttribute("userService")).thenReturn(userService);
         Mockito.when(context.getAttribute("objectMapper")).thenReturn(mapper);
         Mockito.when(req.getSession(true)).thenReturn(session);
+        Mockito.when(resp.getWriter()).thenReturn(pw);
+        Mockito.when(req.getInputStream()).thenReturn(inputStream);
+
         infoUpdateServlet.init();
         
-        Mockito.when(resp.getWriter()).thenReturn(pw);
 
         Mockito.doAnswer(new Answer<Void>() {
             @Override

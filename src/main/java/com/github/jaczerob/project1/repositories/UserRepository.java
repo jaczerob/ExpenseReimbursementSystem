@@ -24,7 +24,7 @@ import com.github.jaczerob.project1.models.users.User;
  * Represents a repository interface for accessing and managing users
  * @author Jacob
  * @since 0.1
- * @version 0.3
+ * @version 0.13
  */
 public class UserRepository implements IRepository<User, String> {
     private static Logger logger = LogManager.getLogger(UserRepository.class);
@@ -64,7 +64,7 @@ public class UserRepository implements IRepository<User, String> {
                 }
             }
         } catch (SQLException exc) {
-            logger.warn("error with users get request", exc);
+            logger.error("error with users get request", exc);
         }
 
         return Optional.ofNullable(user);
@@ -86,7 +86,7 @@ public class UserRepository implements IRepository<User, String> {
             int rows = ps.executeUpdate();
             if (rows < 1) throw new RecordNotExistsException();
         } catch (SQLException exc) {
-            logger.warn("error with users update request", exc);
+            logger.error("error with users update request", exc);
         }
     }
 
@@ -105,7 +105,7 @@ public class UserRepository implements IRepository<User, String> {
             ps.executeUpdate();
         } catch (SQLException exc) {
             if (exc.getSQLState().startsWith("23")) throw new RecordAlreadyExistsException();
-            logger.warn("error with users insert request", exc);
+            logger.error("error with users insert request", exc);
         }
     }
 
@@ -139,7 +139,7 @@ public class UserRepository implements IRepository<User, String> {
                 users.add(new Employee(userID, email, username, password));
             }
         } catch (SQLException exc) {
-            logger.warn("error with users get request", exc);
+            logger.error("error with users get request", exc);
         }
 
         return users;

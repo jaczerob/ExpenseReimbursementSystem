@@ -32,19 +32,19 @@ import javax.servlet.http.HttpServletResponse;
 <span class="nc" id="L32">        StringBuilder formatParams = new StringBuilder();</span>
 <span class="nc bnc" id="L33" title="All 2 branches missed.">        for (Entry&lt;String, String[]&gt; entry : req.getParameterMap().entrySet()) {</span>
 <span class="nc bnc" id="L34" title="All 2 branches missed.">            if (entry.getKey().equals(&quot;password&quot;)) {</span>
-<span class="nc" id="L35">                formatParams.append(&quot;*****&quot;);</span>
+<span class="nc" id="L35">                formatParams.append(String.format(&quot;%s=******&quot;, entry.getKey()));</span>
             } else {
-<span class="nc" id="L37">                formatParams.append(String.join(&quot; &quot;));</span>
+<span class="nc" id="L37">                formatParams.append(String.format(&quot;%s=%s&quot;, entry.getKey(), String.join(&quot; &quot;, entry.getValue())));</span>
             }
 
-<span class="nc" id="L40">            formatParams.append(&quot; &quot;);</span>
+<span class="nc" id="L40">            formatParams.append(&quot;&amp;&quot;);</span>
 <span class="nc" id="L41">        }</span>
-        
-<span class="nc" id="L43">        String formattedParams = formatParams.toString().trim();</span>
+
+<span class="nc" id="L43">        String formattedParams = formatParams.toString();</span>
 <span class="nc bnc" id="L44" title="All 2 branches missed.">        if (formattedParams.isEmpty()) {</span>
 <span class="nc" id="L45">            logger.info(&quot;servicing {} method to URL {}&quot;, req.getMethod(), req.getRequestURL());</span>
         } else {
-<span class="nc" id="L47">            logger.info(&quot;servicing {} method to URL {} with parameters: {}&quot;, req.getMethod(), req.getRequestURL(), formatParams);</span>
+<span class="nc" id="L47">            logger.info(&quot;servicing {} method to URL {} with parameters: {}&quot;, req.getMethod(), req.getRequestURL(), formatParams.substring(0, formatParams.length() - 1));</span>
         }
 
 <span class="nc bnc" id="L50" title="All 2 branches missed.">        if (req.getMethod().equalsIgnoreCase(&quot;PATCH&quot;)) {</span>

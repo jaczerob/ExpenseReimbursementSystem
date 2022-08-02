@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserInformationResponse.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project1</a> &gt; <a href="index.source.html" class="el_package">com.github.jaczerob.project1.web.responses.employee.information</a> &gt; <span class="el_source">UserInformationResponse.java</span></div><h1>UserInformationResponse.java</h1><pre class="source lang-java linenums">package com.github.jaczerob.project1.web.responses.employee.information;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
+import com.github.jaczerob.project1.models.requests.ReimbursementRequest;
 import com.github.jaczerob.project1.models.users.User;
 import com.github.jaczerob.project1.web.responses.Response;
 
@@ -9,32 +12,44 @@ import com.github.jaczerob.project1.web.responses.Response;
  * Represents a HTTP response showing user information
  * @author Jacob
  * @since 0.10
- * @version 0.10
+ * @version 0.13
  */
 public class UserInformationResponse extends Response {
     private User user;
+    private List&lt;ReimbursementRequest&gt; pendingRequests;
+    private List&lt;ReimbursementRequest&gt; resolvedRequests;
 
     /**
      * Constructs a new UserInformationResponse
      * Sets the status code to 200 (OK)
      * @param resp The raw HTTP response
      */
-<span class="fc" id="L22">    public UserInformationResponse(HttpServletResponse resp, User user) {</span>
-<span class="fc" id="L23">        resp.setStatus(HttpServletResponse.SC_OK);</span>
-<span class="fc" id="L24">        this.setMessage(&quot;Here is your user information!&quot;);</span>
-<span class="fc" id="L25">        this.user = user;</span>
-<span class="fc" id="L26">    }</span>
+<span class="nc" id="L27">    public UserInformationResponse(HttpServletResponse resp, User user, List&lt;ReimbursementRequest&gt; pendingRequests, List&lt;ReimbursementRequest&gt; resolvedRequests) {</span>
+<span class="nc" id="L28">        resp.setStatus(HttpServletResponse.SC_OK);</span>
+<span class="nc" id="L29">        this.setMessage(&quot;Here is your user information!&quot;);</span>
+<span class="nc" id="L30">        this.user = user;</span>
+<span class="nc" id="L31">        this.pendingRequests = pendingRequests;</span>
+<span class="nc" id="L32">        this.resolvedRequests = resolvedRequests;</span>
+<span class="nc" id="L33">    }</span>
 
     public String getUsername() {
-<span class="fc" id="L29">        return this.user.getUsername();</span>
+<span class="nc" id="L36">        return this.user.getUsername();</span>
     }
 
     public String getEmail() {
-<span class="fc" id="L33">        return this.user.getEmail();</span>
+<span class="nc" id="L40">        return this.user.getEmail();</span>
     }
 
     public int getID() {
-<span class="fc" id="L37">        return this.user.getID();</span>
+<span class="nc" id="L44">        return this.user.getID();</span>
+    }
+
+    public List&lt;ReimbursementRequest&gt; getPendingRequests() {
+<span class="nc" id="L48">        return this.pendingRequests;</span>
+    }
+
+    public List&lt;ReimbursementRequest&gt; getResolvedRequests() {
+<span class="nc" id="L52">        return this.resolvedRequests;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
