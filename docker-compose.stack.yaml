@@ -13,7 +13,7 @@ services:
     ports:
       - 5432:5432
   webappd:
-    image: tomcat:9.0
+    image: tomcat:9.0.48-jdk8-openjdk
     restart: on-failure
     environment:
       # sets the postgres connect options in the JVM that can be accessed in the context.xaml file for our web app

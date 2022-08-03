@@ -24,7 +24,7 @@ import com.github.jaczerob.project1.models.users.User;
  * Represents a repository interface for accessing and managing users
  * @author Jacob
  * @since 0.1
- * @version 0.13
+ * @version 0.14
  */
 public class UserRepository implements IRepository&lt;User, String&gt; {
 <span class="fc" id="L30">    private static Logger logger = LogManager.getLogger(UserRepository.class);</span>
@@ -70,44 +70,79 @@ public class UserRepository implements IRepository&lt;User, String&gt; {
 <span class="fc" id="L70">        return Optional.ofNullable(user);</span>
     }
 
+    /**
+     * Returns a user based on their ID
+     * @param id The ID of the user
+     * @return The optional user object
+     */
+    public Optional&lt;User&gt; get(int id) {
+<span class="nc" id="L79">        User user = null;</span>
+<span class="nc" id="L80">        String sql = &quot;SELECT * FROM users WHERE user_id = ?;&quot;;</span>
+
+<span class="nc" id="L82">        try (</span>
+<span class="nc" id="L83">            Connection conn = this.dataSource.getConnection();</span>
+<span class="nc" id="L84">            PreparedStatement ps = conn.prepareStatement(sql)</span>
+        ) {
+<span class="nc" id="L86">            ps.setInt(1, id);</span>
+            
+<span class="nc" id="L88">            ResultSet rs = ps.executeQuery();</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">            if (rs.next()) {</span>
+<span class="nc" id="L90">                int userID = rs.getInt(&quot;user_id&quot;);</span>
+<span class="nc" id="L91">                String email = rs.getString(&quot;user_email&quot;);</span>
+<span class="nc" id="L92">                String gotUsername = rs.getString(&quot;user_username&quot;);</span>
+<span class="nc" id="L93">                String password = rs.getString(&quot;user_password&quot;);</span>
+                
+<span class="nc bnc" id="L95" title="All 2 branches missed.">                if (rs.getBoolean(&quot;user_is_manager&quot;)) {</span>
+<span class="nc" id="L96">                    user = new Manager(userID, email, gotUsername, password);</span>
+                } else {
+<span class="nc" id="L98">                    user = new Employee(userID, email, gotUsername, password);</span>
+                }
+            }
+<span class="nc" id="L101">        } catch (SQLException exc) {</span>
+<span class="nc" id="L102">            logger.error(&quot;error with users get request&quot;, exc);</span>
+<span class="nc" id="L103">        }</span>
+
+<span class="nc" id="L105">        return Optional.ofNullable(user);</span>
+    }
+
     @Override
     public void update(User user) throws RecordNotExistsException {
-<span class="fc" id="L75">        String sql = &quot;UPDATE USERS SET user_email = ?, user_password = ?, user_username = ? WHERE user_id = ?;&quot;;</span>
+<span class="fc" id="L110">        String sql = &quot;UPDATE USERS SET user_email = ?, user_password = ?, user_username = ? WHERE user_id = ?;&quot;;</span>
 
-<span class="fc" id="L77">        try (</span>
-<span class="fc" id="L78">            Connection conn = this.dataSource.getConnection();</span>
-<span class="fc" id="L79">            PreparedStatement ps = conn.prepareStatement(sql)</span>
+<span class="fc" id="L112">        try (</span>
+<span class="fc" id="L113">            Connection conn = this.dataSource.getConnection();</span>
+<span class="fc" id="L114">            PreparedStatement ps = conn.prepareStatement(sql)</span>
         ) {
-<span class="fc" id="L81">            ps.setString(1, user.getEmail());</span>
-<span class="fc" id="L82">            ps.setString(2, user.getPassword());</span>
-<span class="fc" id="L83">            ps.setString(3, user.getUsername());</span>
-<span class="fc" id="L84">            ps.setInt(4, user.getID());</span>
+<span class="fc" id="L116">            ps.setString(1, user.getEmail());</span>
+<span class="fc" id="L117">            ps.setString(2, user.getPassword());</span>
+<span class="fc" id="L118">            ps.setString(3, user.getUsername());</span>
+<span class="fc" id="L119">            ps.setInt(4, user.getID());</span>
             
-<span class="fc" id="L86">            int rows = ps.executeUpdate();</span>
-<span class="pc bpc" id="L87" title="1 of 2 branches missed.">            if (rows &lt; 1) throw new RecordNotExistsException();</span>
-<span class="nc" id="L88">        } catch (SQLException exc) {</span>
-<span class="nc" id="L89">            logger.error(&quot;error with users update request&quot;, exc);</span>
-<span class="fc" id="L90">        }</span>
-<span class="fc" id="L91">    }</span>
+<span class="fc" id="L121">            int rows = ps.executeUpdate();</span>
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">            if (rows &lt; 1) throw new RecordNotExistsException();</span>
+<span class="nc" id="L123">        } catch (SQLException exc) {</span>
+<span class="nc" id="L124">            logger.error(&quot;error with users update request&quot;, exc);</span>
+<span class="fc" id="L125">        }</span>
+<span class="fc" id="L126">    }</span>
 
     @Override
     public void insert(User user) throws RecordAlreadyExistsException {
-<span class="fc" id="L95">        String sql = &quot;INSERT INTO users (user_email, user_username, user_password, user_is_manager) VALUES (?, ?, ?, ?);&quot;;</span>
+<span class="fc" id="L130">        String sql = &quot;INSERT INTO users (user_email, user_username, user_password, user_is_manager) VALUES (?, ?, ?, ?);&quot;;</span>
 
-<span class="fc" id="L97">        try (</span>
-<span class="fc" id="L98">            Connection conn = this.dataSource.getConnection();</span>
-<span class="fc" id="L99">            PreparedStatement ps = conn.prepareStatement(sql)</span>
+<span class="fc" id="L132">        try (</span>
+<span class="fc" id="L133">            Connection conn = this.dataSource.getConnection();</span>
+<span class="fc" id="L134">            PreparedStatement ps = conn.prepareStatement(sql)</span>
         ) {
-<span class="fc" id="L101">            ps.setString(1, user.getEmail());</span>
-<span class="fc" id="L102">            ps.setString(2, user.getUsername());</span>
-<span class="fc" id="L103">            ps.setString(3, user.getPassword());</span>
-<span class="fc" id="L104">            ps.setBoolean(4, user instanceof Manager);</span>
-<span class="fc" id="L105">            ps.executeUpdate();</span>
-<span class="fc" id="L106">        } catch (SQLException exc) {</span>
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">            if (exc.getSQLState().startsWith(&quot;23&quot;)) throw new RecordAlreadyExistsException();</span>
-<span class="nc" id="L108">            logger.error(&quot;error with users insert request&quot;, exc);</span>
-<span class="fc" id="L109">        }</span>
-<span class="fc" id="L110">    }</span>
+<span class="fc" id="L136">            ps.setString(1, user.getEmail());</span>
+<span class="fc" id="L137">            ps.setString(2, user.getUsername());</span>
+<span class="fc" id="L138">            ps.setString(3, user.getPassword());</span>
+<span class="fc" id="L139">            ps.setBoolean(4, user instanceof Manager);</span>
+<span class="fc" id="L140">            ps.executeUpdate();</span>
+<span class="fc" id="L141">        } catch (SQLException exc) {</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">            if (exc.getSQLState().startsWith(&quot;23&quot;)) throw new RecordAlreadyExistsException();</span>
+<span class="nc" id="L143">            logger.error(&quot;error with users insert request&quot;, exc);</span>
+<span class="fc" id="L144">        }</span>
+<span class="fc" id="L145">    }</span>
 
     /**
      * Returns all employees in the database
@@ -115,34 +150,34 @@ public class UserRepository implements IRepository&lt;User, String&gt; {
      * @throws SQLException If an error occurs in the SQL statements
      */
     public List&lt;Employee&gt; getAllEmployees() {
-<span class="fc" id="L118">        List&lt;Employee&gt; users = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L153">        List&lt;Employee&gt; users = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L120">        try (</span>
-<span class="fc" id="L121">            Connection conn = this.dataSource.getConnection();</span>
-<span class="fc" id="L122">            Statement statement = conn.createStatement()</span>
+<span class="fc" id="L155">        try (</span>
+<span class="fc" id="L156">            Connection conn = this.dataSource.getConnection();</span>
+<span class="fc" id="L157">            Statement statement = conn.createStatement()</span>
         ) {
-<span class="fc" id="L124">            statement.execute(&quot;SELECT * FROM users WHERE user_is_manager = FALSE;&quot;);</span>
+<span class="fc" id="L159">            statement.execute(&quot;SELECT * FROM users WHERE user_is_manager = FALSE;&quot;);</span>
 
-<span class="fc" id="L126">            ResultSet rs = statement.getResultSet();</span>
+<span class="fc" id="L161">            ResultSet rs = statement.getResultSet();</span>
 
             int userID;
             String email;
             String username;
             String password;
             
-<span class="fc bfc" id="L133" title="All 2 branches covered.">            while (rs.next()) {</span>
-<span class="fc" id="L134">                userID = rs.getInt(&quot;user_id&quot;);</span>
-<span class="fc" id="L135">                email = rs.getString(&quot;user_email&quot;);</span>
-<span class="fc" id="L136">                username = rs.getString(&quot;user_username&quot;);</span>
-<span class="fc" id="L137">                password = rs.getString(&quot;user_password&quot;);</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">            while (rs.next()) {</span>
+<span class="fc" id="L169">                userID = rs.getInt(&quot;user_id&quot;);</span>
+<span class="fc" id="L170">                email = rs.getString(&quot;user_email&quot;);</span>
+<span class="fc" id="L171">                username = rs.getString(&quot;user_username&quot;);</span>
+<span class="fc" id="L172">                password = rs.getString(&quot;user_password&quot;);</span>
                 
-<span class="fc" id="L139">                users.add(new Employee(userID, email, username, password));</span>
+<span class="fc" id="L174">                users.add(new Employee(userID, email, username, password));</span>
             }
-<span class="nc" id="L141">        } catch (SQLException exc) {</span>
-<span class="nc" id="L142">            logger.error(&quot;error with users get request&quot;, exc);</span>
-<span class="fc" id="L143">        }</span>
+<span class="nc" id="L176">        } catch (SQLException exc) {</span>
+<span class="nc" id="L177">            logger.error(&quot;error with users get request&quot;, exc);</span>
+<span class="fc" id="L178">        }</span>
 
-<span class="fc" id="L145">        return users;</span>
+<span class="fc" id="L180">        return users;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

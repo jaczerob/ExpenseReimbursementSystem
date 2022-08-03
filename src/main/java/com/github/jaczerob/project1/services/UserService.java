@@ -13,7 +13,7 @@ import com.github.jaczerob.project1.repositories.UserRepository;
  * Represents the user service bridge to the repository
  * @author Jacob
  * @since 0.2
- * @version 0.12
+ * @version 0.14
  */
 public class UserService {
     private UserRepository userRepository;
@@ -35,6 +35,17 @@ public class UserService {
     public Optional<User> getUser(String username) throws IllegalArgumentException {
         if (username.isEmpty() || username.length() > 32) throw new IllegalArgumentException("Invalid username");
         return this.userRepository.get(username);
+    }
+
+    /**
+     * Gets a user by their username
+     * @param username The username of the user
+     * @return The optional user object
+     * @throws IllegalArgumentException If the username is not valid
+     */
+    public Optional<User> getUser(int id) throws IllegalArgumentException {
+        if (id < 0) throw new IllegalArgumentException("Invalid id");
+        return this.userRepository.get(id);
     }
 
     /**

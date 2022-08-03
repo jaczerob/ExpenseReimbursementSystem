@@ -24,7 +24,7 @@ import com.github.jaczerob.project1.models.users.User;
  * Represents a repository interface for accessing and managing users
  * @author Jacob
  * @since 0.1
- * @version 0.13
+ * @version 0.14
  */
 public class UserRepository implements IRepository<User, String> {
     private static Logger logger = LogManager.getLogger(UserRepository.class);
@@ -49,6 +49,41 @@ public class UserRepository implements IRepository<User, String> {
             PreparedStatement ps = conn.prepareStatement(sql)
         ) {
             ps.setString(1, username);
+            
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int userID = rs.getInt("user_id");
+                String email = rs.getString("user_email");
+                String gotUsername = rs.getString("user_username");
+                String password = rs.getString("user_password");
+                
+                if (rs.getBoolean("user_is_manager")) {
+                    user = new Manager(userID, email, gotUsername, password);
+                } else {
+                    user = new Employee(userID, email, gotUsername, password);
+                }
+            }
+        } catch (SQLException exc) {
+            logger.error("error with users get request", exc);
+        }
+
+        return Optional.ofNullable(user);
+    }
+
+    /**
+     * Returns a user based on their ID
+     * @param id The ID of the user
+     * @return The optional user object
+     */
+    public Optional<User> get(int id) {
+        User user = null;
+        String sql = "SELECT * FROM users WHERE user_id = ?;";
+
+        try (
+            Connection conn = this.dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)
+        ) {
+            ps.setInt(1, id);
             
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {

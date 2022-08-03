@@ -38,23 +38,34 @@ public class UserService {
     }
 
     /**
+     * Gets a user by their username
+     * @param username The username of the user
+     * @return The optional user object
+     * @throws IllegalArgumentException If the username is not valid
+     */
+    public Optional&lt;User&gt; getUser(int id) throws IllegalArgumentException {
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (id &lt; 0) throw new IllegalArgumentException(&quot;Invalid id&quot;);</span>
+<span class="nc" id="L48">        return this.userRepository.get(id);</span>
+    }
+
+    /**
      * Updates an existing user
      * @param user The user to update
      * @throws RecordNotExistsException If the user does not exist
      */
     public void updateUser(User user) throws RecordNotExistsException {
-<span class="fc" id="L46">        if (</span>
-<span class="fc bfc" id="L47" title="All 2 branches covered.">            user.getID() &lt; 0 || </span>
-<span class="fc bfc" id="L48" title="All 2 branches covered.">            user.getUsername().isEmpty() || </span>
-<span class="fc bfc" id="L49" title="All 2 branches covered.">            user.getUsername().length() &gt; 32 ||</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">            user.getPassword().isEmpty() ||</span>
-<span class="fc bfc" id="L51" title="All 2 branches covered.">            user.getPassword().length() &gt; 255 ||</span>
-<span class="fc bfc" id="L52" title="All 2 branches covered.">            user.getEmail().isEmpty() ||</span>
-<span class="fc bfc" id="L53" title="All 2 branches covered.">            user.getEmail().length() &gt; 255</span>
-<span class="fc" id="L54">        ) throw new IllegalArgumentException(&quot;Invalid properties&quot;);</span>
+<span class="fc" id="L57">        if (</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">            user.getID() &lt; 0 || </span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">            user.getUsername().isEmpty() || </span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">            user.getUsername().length() &gt; 32 ||</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">            user.getPassword().isEmpty() ||</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">            user.getPassword().length() &gt; 255 ||</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">            user.getEmail().isEmpty() ||</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">            user.getEmail().length() &gt; 255</span>
+<span class="fc" id="L65">        ) throw new IllegalArgumentException(&quot;Invalid properties&quot;);</span>
 
-<span class="fc" id="L56">        this.userRepository.update(user);</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L67">        this.userRepository.update(user);</span>
+<span class="fc" id="L68">    }</span>
 
     /**
      * Gets a user if the username and password match a record in the database
@@ -64,14 +75,14 @@ public class UserService {
      * @throws IllegalArgumentException If the username or password is not valid
      */
     public Optional&lt;User&gt; loginUser(String username, String password) throws IllegalArgumentException {
-<span class="nc bnc" id="L67" title="All 4 branches missed.">        if (username.isEmpty() || username.length() &gt; 32) throw new IllegalArgumentException(&quot;Invalid login details&quot;);</span>
-<span class="nc bnc" id="L68" title="All 4 branches missed.">        if (password.isEmpty() || password.length() &gt; 255) throw new IllegalArgumentException(&quot;Invalid login details&quot;);</span>
+<span class="nc bnc" id="L78" title="All 4 branches missed.">        if (username.isEmpty() || username.length() &gt; 32) throw new IllegalArgumentException(&quot;Invalid login details&quot;);</span>
+<span class="nc bnc" id="L79" title="All 4 branches missed.">        if (password.isEmpty() || password.length() &gt; 255) throw new IllegalArgumentException(&quot;Invalid login details&quot;);</span>
         
-<span class="nc" id="L70">        Optional&lt;User&gt; user = this.userRepository.get(username);</span>
-<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (user.isPresent())</span>
-<span class="nc bnc" id="L72" title="All 2 branches missed.">            user = user.get().getPassword().equals(password) ? user : Optional.empty();</span>
+<span class="nc" id="L81">        Optional&lt;User&gt; user = this.userRepository.get(username);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (user.isPresent())</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">            user = user.get().getPassword().equals(password) ? user : Optional.empty();</span>
 
-<span class="nc" id="L74">        return user;</span>
+<span class="nc" id="L85">        return user;</span>
     }
 
     /**
@@ -81,25 +92,25 @@ public class UserService {
      * @throws IllegalArgumentException If the user properties are invalid
      */
     public void registerUser(User user) throws IllegalArgumentException, RecordAlreadyExistsException {
-<span class="fc" id="L84">        if (</span>
-<span class="fc bfc" id="L85" title="All 2 branches covered.">            user.getID() &lt; 0 || </span>
-<span class="fc bfc" id="L86" title="All 2 branches covered.">            user.getUsername().isEmpty() || </span>
-<span class="fc bfc" id="L87" title="All 2 branches covered.">            user.getUsername().length() &gt; 32 ||</span>
-<span class="fc bfc" id="L88" title="All 2 branches covered.">            user.getPassword().isEmpty() ||</span>
-<span class="fc bfc" id="L89" title="All 2 branches covered.">            user.getPassword().length() &gt; 255 ||</span>
-<span class="fc bfc" id="L90" title="All 2 branches covered.">            user.getEmail().isEmpty() ||</span>
-<span class="fc bfc" id="L91" title="All 2 branches covered.">            user.getEmail().length() &gt; 255</span>
-<span class="fc" id="L92">        ) throw new IllegalArgumentException(&quot;Invalid properties&quot;);</span>
+<span class="fc" id="L95">        if (</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">            user.getID() &lt; 0 || </span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">            user.getUsername().isEmpty() || </span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">            user.getUsername().length() &gt; 32 ||</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">            user.getPassword().isEmpty() ||</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">            user.getPassword().length() &gt; 255 ||</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">            user.getEmail().isEmpty() ||</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">            user.getEmail().length() &gt; 255</span>
+<span class="fc" id="L103">        ) throw new IllegalArgumentException(&quot;Invalid properties&quot;);</span>
 
-<span class="fc" id="L94">        this.userRepository.insert(user);</span>
-<span class="fc" id="L95">    }</span>
+<span class="fc" id="L105">        this.userRepository.insert(user);</span>
+<span class="fc" id="L106">    }</span>
 
     /**
      * Gets all employees
      * @return A list of all employees
      */
     public List&lt;Employee&gt; getAllEmployees() {
-<span class="fc" id="L102">        return this.userRepository.getAllEmployees();</span>
+<span class="fc" id="L113">        return this.userRepository.getAllEmployees();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

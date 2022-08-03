@@ -54,4 +54,9 @@ public abstract class ReimbursementRequest extends ERSObject {
     public int hashCode() {
         return this.getID();
     }
+
+    @Override
+    public String toString() {
+        return String.format("ReimbursementRequest(id=%d, employeeID=%d, type=%s, amount=%f)", this.getID(), this.getEmployeeID(), this.getType(), this.getAmount());
+    }
 }

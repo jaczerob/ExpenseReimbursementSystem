@@ -3,6 +3,7 @@ package com.github.jaczerob.web.servlets.common;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
@@ -21,8 +22,10 @@ import org.mockito.stubbing.Answer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.jaczerob.project1.models.requests.ReimbursementRequest;
 import com.github.jaczerob.project1.models.users.Employee;
 import com.github.jaczerob.project1.models.users.User;
+import com.github.jaczerob.project1.services.ReimbursementRequestService;
 import com.github.jaczerob.project1.web.servlets.employee.InfoServlet;
 
 public class InfoServletTest {
@@ -32,6 +35,7 @@ public class InfoServletTest {
     HttpServletRequest req;
     HttpServletResponse resp;
     HttpSession session;
+    ReimbursementRequestService reimbursementRequestService;
 
     int gotStatus;
     StringWriter sw;
@@ -46,6 +50,7 @@ public class InfoServletTest {
         req = Mockito.mock(HttpServletRequest.class);
         resp = Mockito.mock(HttpServletResponse.class);
         session = Mockito.mock(HttpSession.class);
+        reimbursementRequestService = Mockito.mock(ReimbursementRequestService.class);
         
         gotStatus = -1;
         sw = new StringWriter();
@@ -55,6 +60,7 @@ public class InfoServletTest {
         Mockito.doReturn(config).when(infoServlet).getServletConfig();
         Mockito.doReturn(context).when(infoServlet).getServletContext();
         Mockito.when(context.getAttribute("objectMapper")).thenReturn(mapper);
+        Mockito.when(context.getAttribute("reimbursementRequestService")).thenReturn(reimbursementRequestService);
         Mockito.when(resp.getWriter()).thenReturn(pw);
         Mockito.when(req.getSession(true)).thenReturn(session);
         infoServlet.init();
@@ -68,6 +74,9 @@ public class InfoServletTest {
                 return null;
             }
         }).when(resp).setStatus(Mockito.anyInt());
+
+        Mockito.when(reimbursementRequestService.getAllResolvedEmployeeReimbursements(Mockito.anyInt())).thenReturn(Arrays.asList(new ReimbursementRequest[]{}));
+        Mockito.when(reimbursementRequestService.getAllPendingEmployeeReimbursements(Mockito.anyInt())).thenReturn(Arrays.asList(new ReimbursementRequest[]{}));
     }
 
     @Test
@@ -85,20 +94,6 @@ public class InfoServletTest {
         Assert.assertEquals(user.getEmail(), response.get("email"));
         Assert.assertEquals(user.getUsername(), response.get("username"));
         Assert.assertEquals(String.valueOf(user.getID()), response.get("id"));
-        Assert.assertEquals(wantStatus, gotStatus);
-    }
-
-    @Test
-    public void testInfoFail_whenNotLoggedIn() throws ServletException, IOException {
-        int wantStatus = HttpServletResponse.SC_UNAUTHORIZED;
-
-        Mockito.when(session.getAttribute("user")).thenReturn(null);
-
-        infoServlet.doGet(req, resp);
-
-        pw.flush();
-        Map<String, String> response = mapper.readValue(sw.toString(), new TypeReference<Map<String, String>>() {});
-        Assert.assertEquals("You are not authorized to access this endpoint.", response.get("message"));
         Assert.assertEquals(wantStatus, gotStatus);
     }
 }
