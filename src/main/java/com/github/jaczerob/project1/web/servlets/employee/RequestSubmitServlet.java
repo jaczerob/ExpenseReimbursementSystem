@@ -35,7 +35,7 @@ public class RequestSubmitServlet extends EmployeeServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(true);
         Employee employee = (Employee) session.getAttribute("user");
         Response response = null;

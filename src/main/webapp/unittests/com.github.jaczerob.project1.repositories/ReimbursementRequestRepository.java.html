@@ -23,7 +23,7 @@ import com.github.jaczerob.project1.models.requests.ResolvedReimbursementRequest
  * Represents a repository interface for accessing and managing reimbursement requests
  * @author Jacob
  * @since 0.1
- * @version 0.13
+ * @version 0.15
  */
 public class ReimbursementRequestRepository implements IRepository&lt;ReimbursementRequest, Integer&gt; {
 <span class="fc" id="L29">    private static Logger logger = LogManager.getLogger(ReimbursementRequestRepository.class);</span>
@@ -66,9 +66,9 @@ public class ReimbursementRequestRepository implements IRepository&lt;Reimbursem
 <span class="fc" id="L66">                String type = rs.getString(REIMBURSEMENT_REQUEST_TYPE);</span>
                 
 <span class="pc bpc" id="L68" title="1 of 2 branches missed.">                if (rs.getBoolean(REIMBURSEMENT_REQUEST_PENDING)) {</span>
-<span class="fc" id="L69">                    reimbursementRequest = new ResolvedReimbursementRequest(requestID, employeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID));</span>
+<span class="fc" id="L69">                    reimbursementRequest = new PendingReimbursementRequest(requestID, employeeID, amount, type);</span>
                 } else {
-<span class="nc" id="L71">                    reimbursementRequest = new PendingReimbursementRequest(requestID, employeeID, amount, type);</span>
+<span class="nc" id="L71">                    reimbursementRequest = new ResolvedReimbursementRequest(requestID, employeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID));</span>
                 }
             }
 <span class="nc" id="L74">        } catch (SQLException exc) {</span>
@@ -195,9 +195,9 @@ public class ReimbursementRequestRepository implements IRepository&lt;Reimbursem
 <span class="fc" id="L195">                type = rs.getString(REIMBURSEMENT_REQUEST_TYPE);</span>
                 
 <span class="pc bpc" id="L197" title="1 of 2 branches missed.">                if (rs.getBoolean(REIMBURSEMENT_REQUEST_PENDING)) {</span>
-<span class="fc" id="L198">                    reimbursementRequests.add(new ResolvedReimbursementRequest(requestID, gotEmployeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID)));</span>
+<span class="fc" id="L198">                    reimbursementRequests.add(new PendingReimbursementRequest(requestID, gotEmployeeID, amount, type));</span>
                 } else {
-<span class="nc" id="L200">                    reimbursementRequests.add(new PendingReimbursementRequest(requestID, gotEmployeeID, amount, type));</span>
+<span class="nc" id="L200">                    reimbursementRequests.add(new ResolvedReimbursementRequest(requestID, gotEmployeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID)));</span>
                 }
             }
 <span class="nc" id="L203">        } catch (SQLException exc) {</span>
@@ -214,41 +214,41 @@ public class ReimbursementRequestRepository implements IRepository&lt;Reimbursem
      * @return A list of reimbursement requests from the employee
      */
     public List&lt;ReimbursementRequest&gt; getAllFromEmployee(int employeeID, boolean isPending) {
-<span class="nc" id="L217">        List&lt;ReimbursementRequest&gt; reimbursementRequests = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L218">        String sql = &quot;SELECT * FROM reimbursement_requests WHERE reimbursement_request_employee_id = ? AND reimbursement_request_pending = ?;&quot;;</span>
+<span class="fc" id="L217">        List&lt;ReimbursementRequest&gt; reimbursementRequests = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L218">        String sql = &quot;SELECT * FROM reimbursement_requests WHERE reimbursement_request_employee_id = ? AND reimbursement_request_pending = ?;&quot;;</span>
 
-<span class="nc" id="L220">        try (</span>
-<span class="nc" id="L221">            Connection conn = this.dataSource.getConnection();</span>
-<span class="nc" id="L222">            PreparedStatement ps = conn.prepareStatement(sql)</span>
+<span class="fc" id="L220">        try (</span>
+<span class="fc" id="L221">            Connection conn = this.dataSource.getConnection();</span>
+<span class="fc" id="L222">            PreparedStatement ps = conn.prepareStatement(sql)</span>
         ) {
-<span class="nc" id="L224">            ps.setInt(1, employeeID);</span>
-<span class="nc" id="L225">            ps.setBoolean(2, isPending);</span>
-<span class="nc" id="L226">            ps.execute();</span>
+<span class="fc" id="L224">            ps.setInt(1, employeeID);</span>
+<span class="fc" id="L225">            ps.setBoolean(2, isPending);</span>
+<span class="fc" id="L226">            ps.execute();</span>
             
-<span class="nc" id="L228">            ResultSet rs = ps.getResultSet();</span>
+<span class="fc" id="L228">            ResultSet rs = ps.getResultSet();</span>
             
             int requestID;
             int gotEmployeeID;
             float amount;
             String type;
             
-<span class="nc bnc" id="L235" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L236">                requestID = rs.getInt(REIMBURSEMENT_REQUEST_ID);</span>
-<span class="nc" id="L237">                gotEmployeeID = rs.getInt(REIMBURSEMENT_REQUEST_EMPLOYEE_ID);</span>
-<span class="nc" id="L238">                amount = rs.getInt(REIMBURSEMENT_REQUEST_AMOUNT);</span>
-<span class="nc" id="L239">                type = rs.getString(REIMBURSEMENT_REQUEST_TYPE);</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">            while (rs.next()) {</span>
+<span class="fc" id="L236">                requestID = rs.getInt(REIMBURSEMENT_REQUEST_ID);</span>
+<span class="fc" id="L237">                gotEmployeeID = rs.getInt(REIMBURSEMENT_REQUEST_EMPLOYEE_ID);</span>
+<span class="fc" id="L238">                amount = rs.getInt(REIMBURSEMENT_REQUEST_AMOUNT);</span>
+<span class="fc" id="L239">                type = rs.getString(REIMBURSEMENT_REQUEST_TYPE);</span>
                 
-<span class="nc bnc" id="L241" title="All 2 branches missed.">                if (rs.getBoolean(REIMBURSEMENT_REQUEST_PENDING)) {</span>
-<span class="nc" id="L242">                    reimbursementRequests.add(new ResolvedReimbursementRequest(requestID, gotEmployeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID)));</span>
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">                if (rs.getBoolean(REIMBURSEMENT_REQUEST_PENDING)) {</span>
+<span class="fc" id="L242">                    reimbursementRequests.add(new PendingReimbursementRequest(requestID, gotEmployeeID, amount, type));</span>
                 } else {
-<span class="nc" id="L244">                    reimbursementRequests.add(new PendingReimbursementRequest(requestID, gotEmployeeID, amount, type));</span>
+<span class="nc" id="L244">                    reimbursementRequests.add(new ResolvedReimbursementRequest(requestID, gotEmployeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID)));</span>
                 }
             }
 <span class="nc" id="L247">        } catch (SQLException exc) {</span>
 <span class="nc" id="L248">            logger.error(&quot;error with reimbursement_requests get request&quot;, exc);</span>
-<span class="nc" id="L249">        }</span>
+<span class="fc" id="L249">        }</span>
 
-<span class="nc" id="L251">        return reimbursementRequests;</span>
+<span class="fc" id="L251">        return reimbursementRequests;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

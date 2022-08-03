@@ -17,9 +17,9 @@ public class NoIDSetResponse extends Response {
      * Sets the status code to 400 (Bad Request)
      * @param resp The raw HTTP response
      */
-<span class="nc" id="L20">    public NoIDSetResponse(HttpServletResponse resp) {</span>
-<span class="nc" id="L21">        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);</span>
-<span class="nc" id="L22">        this.setMessage(&quot;Please set an ID of a pending reimbursement request. These can be retrieved from /request/view/pending. To use, do /request/accept/{id} or /request/deny/{id}.&quot;);</span>
-<span class="nc" id="L23">    }</span>
+<span class="fc" id="L20">    public NoIDSetResponse(HttpServletResponse resp) {</span>
+<span class="fc" id="L21">        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);</span>
+<span class="fc" id="L22">        this.setMessage(&quot;Please set an ID of a pending reimbursement request. These can be retrieved from /request/view/pending. To use, do /request/accept/{id} or /request/deny/{id}.&quot;);</span>
+<span class="fc" id="L23">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

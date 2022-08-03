@@ -24,32 +24,32 @@ public class UserInformationResponse extends Response {
      * Sets the status code to 200 (OK)
      * @param resp The raw HTTP response
      */
-<span class="nc" id="L27">    public UserInformationResponse(HttpServletResponse resp, User user, List&lt;ReimbursementRequest&gt; pendingRequests, List&lt;ReimbursementRequest&gt; resolvedRequests) {</span>
-<span class="nc" id="L28">        resp.setStatus(HttpServletResponse.SC_OK);</span>
-<span class="nc" id="L29">        this.setMessage(&quot;Here is your user information!&quot;);</span>
-<span class="nc" id="L30">        this.user = user;</span>
-<span class="nc" id="L31">        this.pendingRequests = pendingRequests;</span>
-<span class="nc" id="L32">        this.resolvedRequests = resolvedRequests;</span>
-<span class="nc" id="L33">    }</span>
+<span class="fc" id="L27">    public UserInformationResponse(HttpServletResponse resp, User user, List&lt;ReimbursementRequest&gt; pendingRequests, List&lt;ReimbursementRequest&gt; resolvedRequests) {</span>
+<span class="fc" id="L28">        resp.setStatus(HttpServletResponse.SC_OK);</span>
+<span class="fc" id="L29">        this.setMessage(&quot;Here is your user information!&quot;);</span>
+<span class="fc" id="L30">        this.user = user;</span>
+<span class="fc" id="L31">        this.pendingRequests = pendingRequests;</span>
+<span class="fc" id="L32">        this.resolvedRequests = resolvedRequests;</span>
+<span class="fc" id="L33">    }</span>
 
     public String getUsername() {
-<span class="nc" id="L36">        return this.user.getUsername();</span>
+<span class="fc" id="L36">        return this.user.getUsername();</span>
     }
 
     public String getEmail() {
-<span class="nc" id="L40">        return this.user.getEmail();</span>
+<span class="fc" id="L40">        return this.user.getEmail();</span>
     }
 
     public int getID() {
-<span class="nc" id="L44">        return this.user.getID();</span>
+<span class="fc" id="L44">        return this.user.getID();</span>
     }
 
     public List&lt;ReimbursementRequest&gt; getPendingRequests() {
-<span class="nc" id="L48">        return this.pendingRequests;</span>
+<span class="fc" id="L48">        return this.pendingRequests;</span>
     }
 
     public List&lt;ReimbursementRequest&gt; getResolvedRequests() {
-<span class="nc" id="L52">        return this.resolvedRequests;</span>
+<span class="fc" id="L52">        return this.resolvedRequests;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

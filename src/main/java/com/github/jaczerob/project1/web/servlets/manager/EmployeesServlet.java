@@ -32,7 +32,7 @@ public class EmployeesServlet extends ManagerServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Employee> employees = userService.getAllEmployees();
         resp.getWriter().write(this.objectMapper.writeValueAsString(new EmployeesResponse(resp, employees)));
     }

@@ -53,7 +53,7 @@ public class RequestAcceptServlet extends ManagerServlet {
         Response response = null;
         if (req.getRequestURI().split("/").length == 3) {
             response = new NoIDSetResponse(resp);
-            resp.getWriter().write(objectMapper.writeValueAsString(response));
+            resp.getWriter().write(this.objectMapper.writeValueAsString(response));
             return;
         }
 
@@ -63,22 +63,31 @@ public class RequestAcceptServlet extends ManagerServlet {
         try {
             int reimbursementRequestID = Integer.parseInt(req.getRequestURI().split("/")[3]);
             Optional<ReimbursementRequest> request = reimbursementRequestService.getReimbursementRequest(reimbursementRequestID);
-            if (!(request.orElse(null) instanceof PendingReimbursementRequest)) {
-                response = new RequestAlreadyResolvedResponse(resp);
+            if (!request.isPresent()) {
+                response = new RequestNotExistsResponse(resp);
             } else {
-                PendingReimbursementRequest pendingReimbursementRequest = (PendingReimbursementRequest) request.get();
-                Optional<User> user = this.userService.getUser(pendingReimbursementRequest.getEmployeeID());
-                if (user.isPresent()) {
+                ReimbursementRequest gotRequest = request.get();
+                if (!(gotRequest instanceof PendingReimbursementRequest)) {
+                    logger.warn("{} is a {}", gotRequest, gotRequest.getClass());
+                    response = new RequestAlreadyResolvedResponse(resp);
+                } else {
+                    PendingReimbursementRequest pendingReimbursementRequest = (PendingReimbursementRequest) request.get();
                     this.reimbursementRequestService.resolveReimbursementRequest(pendingReimbursementRequest, true, manager);
-                    this.mailService.sendEmail(
-                        user.get().getEmail(), 
-                        String.format("Reimbursement request %s has been processed", pendingReimbursementRequest.getType()), 
-                        String.format("Your request for %f has been approved.", pendingReimbursementRequest.getAmount())
-                    );
+                    
+                    Optional<User> user = this.userService.getUser(pendingReimbursementRequest.getEmployeeID());
+                    if (user.isPresent()) {
+                        this.mailService.sendEmail(
+                            user.get().getEmail(), 
+                            String.format("Reimbursement request %s has been processed", pendingReimbursementRequest.getType()), 
+                            String.format("Your request for $%.2f has been approved.", pendingReimbursementRequest.getAmount())
+                        );
 
-                    response = new SuccessfullyResolvedRequestResponse(resp);
+                        response = new SuccessfullyResolvedRequestResponse(resp);
+                    } else {
+                        logger.error("user not found for request {}", pendingReimbursementRequest);
+                        response = new ServerError(resp);
+                    }
                 }
-
             }
         } catch (NumberFormatException ex) {
             response = new IDTypeErrorResponse(resp);

@@ -32,13 +32,17 @@ public class LogoutServlet extends Servlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json");
-        HttpSession session = req.getSession(true);
         Response response;
 
+        // get the user session
+        HttpSession session = req.getSession(true);
+
+        // check if the user attribute exists
         if (session.getAttribute("user") == null) {
+            // if it is null, the user is not logged in
             response = new NotLoggedInResponse(resp);
         } else {
+            // if there is a user, then you can invalidate the session
             session.invalidate();
             response = new SuccessfullyLoggedOutResponse(resp);
         }

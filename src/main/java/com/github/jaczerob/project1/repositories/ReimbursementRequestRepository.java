@@ -23,7 +23,7 @@ import com.github.jaczerob.project1.models.requests.ResolvedReimbursementRequest
  * Represents a repository interface for accessing and managing reimbursement requests
  * @author Jacob
  * @since 0.1
- * @version 0.13
+ * @version 0.15
  */
 public class ReimbursementRequestRepository implements IRepository<ReimbursementRequest, Integer> {
     private static Logger logger = LogManager.getLogger(ReimbursementRequestRepository.class);
@@ -66,9 +66,9 @@ public class ReimbursementRequestRepository implements IRepository<Reimbursement
                 String type = rs.getString(REIMBURSEMENT_REQUEST_TYPE);
                 
                 if (rs.getBoolean(REIMBURSEMENT_REQUEST_PENDING)) {
-                    reimbursementRequest = new ResolvedReimbursementRequest(requestID, employeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID));
-                } else {
                     reimbursementRequest = new PendingReimbursementRequest(requestID, employeeID, amount, type);
+                } else {
+                    reimbursementRequest = new ResolvedReimbursementRequest(requestID, employeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID));
                 }
             }
         } catch (SQLException exc) {
@@ -195,9 +195,9 @@ public class ReimbursementRequestRepository implements IRepository<Reimbursement
                 type = rs.getString(REIMBURSEMENT_REQUEST_TYPE);
                 
                 if (rs.getBoolean(REIMBURSEMENT_REQUEST_PENDING)) {
-                    reimbursementRequests.add(new ResolvedReimbursementRequest(requestID, gotEmployeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID)));
-                } else {
                     reimbursementRequests.add(new PendingReimbursementRequest(requestID, gotEmployeeID, amount, type));
+                } else {
+                    reimbursementRequests.add(new ResolvedReimbursementRequest(requestID, gotEmployeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID)));
                 }
             }
         } catch (SQLException exc) {
@@ -239,9 +239,9 @@ public class ReimbursementRequestRepository implements IRepository<Reimbursement
                 type = rs.getString(REIMBURSEMENT_REQUEST_TYPE);
                 
                 if (rs.getBoolean(REIMBURSEMENT_REQUEST_PENDING)) {
-                    reimbursementRequests.add(new ResolvedReimbursementRequest(requestID, gotEmployeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID)));
-                } else {
                     reimbursementRequests.add(new PendingReimbursementRequest(requestID, gotEmployeeID, amount, type));
+                } else {
+                    reimbursementRequests.add(new ResolvedReimbursementRequest(requestID, gotEmployeeID, amount, type, rs.getBoolean(REIMBURSEMENT_REQUEST_APPROVED), rs.getInt(REIMBURSEMENT_REQUEST_MANAGER_ID)));
                 }
             }
         } catch (SQLException exc) {

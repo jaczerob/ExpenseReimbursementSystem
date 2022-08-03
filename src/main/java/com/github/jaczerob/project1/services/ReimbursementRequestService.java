@@ -14,7 +14,7 @@ import com.github.jaczerob.project1.models.users.Manager;
  * Represents the reimbursement request service bridge to the repository
  * @author Jacob
  * @since 0.2
- * @version 0.13
+ * @version 0.15
  */
 public class ReimbursementRequestService {
     private ReimbursementRequestRepository reimbursementRequestRepository;

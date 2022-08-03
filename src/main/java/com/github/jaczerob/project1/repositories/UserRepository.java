@@ -24,11 +24,18 @@ import com.github.jaczerob.project1.models.users.User;
  * Represents a repository interface for accessing and managing users
  * @author Jacob
  * @since 0.1
- * @version 0.14
+ * @version 0.15
  */
 public class UserRepository implements IRepository<User, String> {
     private static Logger logger = LogManager.getLogger(UserRepository.class);
     
+    // column names
+    private static final String USER_ID = "user_id";
+    private static final String USER_EMAIL = "user_email";
+    private static final String USER_USERNAME = "user_username";
+    private static final String USER_PASSWORD = "user_password";
+    private static final String USER_IS_MANAGER = "user_is_manager";
+
     private DataSource dataSource;
 
     /**
@@ -52,12 +59,12 @@ public class UserRepository implements IRepository<User, String> {
             
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                int userID = rs.getInt("user_id");
-                String email = rs.getString("user_email");
-                String gotUsername = rs.getString("user_username");
-                String password = rs.getString("user_password");
+                int userID = rs.getInt(USER_ID);
+                String email = rs.getString(USER_EMAIL);
+                String gotUsername = rs.getString(USER_USERNAME);
+                String password = rs.getString(USER_PASSWORD);
                 
-                if (rs.getBoolean("user_is_manager")) {
+                if (rs.getBoolean(USER_IS_MANAGER)) {
                     user = new Manager(userID, email, gotUsername, password);
                 } else {
                     user = new Employee(userID, email, gotUsername, password);
@@ -87,12 +94,12 @@ public class UserRepository implements IRepository<User, String> {
             
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                int userID = rs.getInt("user_id");
-                String email = rs.getString("user_email");
-                String gotUsername = rs.getString("user_username");
-                String password = rs.getString("user_password");
+                int userID = rs.getInt(USER_ID);
+                String email = rs.getString(USER_EMAIL);
+                String gotUsername = rs.getString(USER_USERNAME);
+                String password = rs.getString(USER_PASSWORD);
                 
-                if (rs.getBoolean("user_is_manager")) {
+                if (rs.getBoolean(USER_IS_MANAGER)) {
                     user = new Manager(userID, email, gotUsername, password);
                 } else {
                     user = new Employee(userID, email, gotUsername, password);
@@ -166,10 +173,10 @@ public class UserRepository implements IRepository<User, String> {
             String password;
             
             while (rs.next()) {
-                userID = rs.getInt("user_id");
-                email = rs.getString("user_email");
-                username = rs.getString("user_username");
-                password = rs.getString("user_password");
+                userID = rs.getInt(USER_ID);
+                email = rs.getString(USER_EMAIL);
+                username = rs.getString(USER_USERNAME);
+                password = rs.getString(USER_PASSWORD);
                 
                 users.add(new Employee(userID, email, username, password));
             }

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  * @since 0.9
  * @version 0.12
  */
-<span class="fc" id="L20">public abstract class Servlet extends HttpServlet {</span>
+<span class="nc" id="L20">public abstract class Servlet extends HttpServlet {</span>
 <span class="fc" id="L21">    private static Logger logger = LogManager.getLogger(Servlet.class);</span>
     
     @Override
@@ -75,5 +75,15 @@ import javax.servlet.http.HttpServletResponse;
     public void destroy() {
 <span class="nc" id="L76">        logger.info(&quot;{} destroying&quot;, this.getClass().getSimpleName());</span>
 <span class="nc" id="L77">    }</span>
+
+    @Override
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+<span class="nc" id="L81">        super.doGet(req, resp);</span>
+<span class="nc" id="L82">    }</span>
+
+    @Override
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+<span class="nc" id="L86">        super.doPost(req, resp);</span>
+<span class="nc" id="L87">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

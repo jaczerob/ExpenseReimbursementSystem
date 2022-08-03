@@ -39,27 +39,36 @@ public class LoginServlet extends Servlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
         Response response;
 
-        resp.setContentType("application/json");
+        // get username and password parameters
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
 
+        // make sure the username and password are not null
         if (username != null && password != null) {
+            // get the user session and create if needed
             HttpSession session = req.getSession(true);
 
+            // check if the user is already in the session
             if (session.getAttribute("user") != null) {
+                // there is already a user in the session so they are logged in already
                 response = new AlreadyLoggedInResponse(resp);
             } else {
                 try {
+                    // try to log in the user by getting them from the user service and checking password.
+                    // my login method returns Optional<User> based on whether the user details match
+                    // something in the database.
                     Optional<User> user = userService.loginUser(username, password);
-
                     if (!user.isPresent()) {
+                        // login details are incorrect
                         response = new InvalidLoginDetailsResponse(resp);
                     } else {
+                        // login details are correct
                         User gotUser = user.get();
+
+                        // put the user in the user session as an attribute
                         session.setAttribute("user", gotUser);
-        
                         response = new SuccessfulLoginResponse(resp);
                     }
                 } catch (IllegalArgumentException e) {

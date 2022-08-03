@@ -75,4 +75,14 @@ public abstract class Servlet extends HttpServlet {
     public void destroy() {
         logger.info("{} destroying", this.getClass().getSimpleName());
     }
+
+    @Override
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doGet(req, resp);
+    }
+
+    @Override
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPost(req, resp);
+    }
 }

@@ -32,18 +32,22 @@ import com.github.jaczerob.project1.web.servlets.Servlet;
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-<span class="nc" id="L35">        resp.setContentType(&quot;application/json&quot;);</span>
-<span class="nc" id="L36">        HttpSession session = req.getSession(true);</span>
         Response response;
 
-<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (session.getAttribute(&quot;user&quot;) == null) {</span>
-<span class="nc" id="L40">            response = new NotLoggedInResponse(resp);</span>
+        // get the user session
+<span class="nc" id="L38">        HttpSession session = req.getSession(true);</span>
+
+        // check if the user attribute exists
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (session.getAttribute(&quot;user&quot;) == null) {</span>
+            // if it is null, the user is not logged in
+<span class="nc" id="L43">            response = new NotLoggedInResponse(resp);</span>
         } else {
-<span class="nc" id="L42">            session.invalidate();</span>
-<span class="nc" id="L43">            response = new SuccessfullyLoggedOutResponse(resp);</span>
+            // if there is a user, then you can invalidate the session
+<span class="nc" id="L46">            session.invalidate();</span>
+<span class="nc" id="L47">            response = new SuccessfullyLoggedOutResponse(resp);</span>
         }
 
-<span class="nc" id="L46">        resp.getWriter().write(objectMapper.writeValueAsString(response));</span>
-<span class="nc" id="L47">    }</span>
+<span class="nc" id="L50">        resp.getWriter().write(objectMapper.writeValueAsString(response));</span>
+<span class="nc" id="L51">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

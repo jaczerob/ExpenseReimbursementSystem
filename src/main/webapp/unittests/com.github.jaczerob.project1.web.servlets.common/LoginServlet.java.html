@@ -26,7 +26,7 @@ import com.github.jaczerob.project1.web.servlets.Servlet;
  * @version 0.9
  */
 @WebServlet(name=&quot;LoginServlet&quot;, urlPatterns={&quot;/login&quot;})
-<span class="fc" id="L29">public class LoginServlet extends Servlet {</span>
+<span class="nc" id="L29">public class LoginServlet extends Servlet {</span>
     private UserService userService;
     private ObjectMapper objectMapper;
 
@@ -39,38 +39,47 @@ import com.github.jaczerob.project1.web.servlets.Servlet;
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-<span class="fc" id="L42">        String username = req.getParameter(&quot;username&quot;);</span>
-<span class="fc" id="L43">        String password = req.getParameter(&quot;password&quot;);</span>
         Response response;
 
-<span class="fc" id="L46">        resp.setContentType(&quot;application/json&quot;);</span>
+        // get username and password parameters
+<span class="fc" id="L45">        String username = req.getParameter(&quot;username&quot;);</span>
+<span class="fc" id="L46">        String password = req.getParameter(&quot;password&quot;);</span>
 
-<span class="pc bpc" id="L48" title="1 of 4 branches missed.">        if (username != null &amp;&amp; password != null) {</span>
-<span class="fc" id="L49">            HttpSession session = req.getSession(true);</span>
+        // make sure the username and password are not null
+<span class="pc bpc" id="L49" title="1 of 4 branches missed.">        if (username != null &amp;&amp; password != null) {</span>
+            // get the user session and create if needed
+<span class="fc" id="L51">            HttpSession session = req.getSession(true);</span>
 
-<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (session.getAttribute(&quot;user&quot;) != null) {</span>
-<span class="fc" id="L52">                response = new AlreadyLoggedInResponse(resp);</span>
+            // check if the user is already in the session
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            if (session.getAttribute(&quot;user&quot;) != null) {</span>
+                // there is already a user in the session so they are logged in already
+<span class="fc" id="L56">                response = new AlreadyLoggedInResponse(resp);</span>
             } else {
                 try {
-<span class="fc" id="L55">                    Optional&lt;User&gt; user = userService.loginUser(username, password);</span>
-
-<span class="fc bfc" id="L57" title="All 2 branches covered.">                    if (!user.isPresent()) {</span>
-<span class="fc" id="L58">                        response = new InvalidLoginDetailsResponse(resp);</span>
+                    // try to log in the user by getting them from the user service and checking password.
+                    // my login method returns Optional&lt;User&gt; based on whether the user details match
+                    // something in the database.
+<span class="fc" id="L62">                    Optional&lt;User&gt; user = userService.loginUser(username, password);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">                    if (!user.isPresent()) {</span>
+                        // login details are incorrect
+<span class="fc" id="L65">                        response = new InvalidLoginDetailsResponse(resp);</span>
                     } else {
-<span class="fc" id="L60">                        User gotUser = user.get();</span>
-<span class="fc" id="L61">                        session.setAttribute(&quot;user&quot;, gotUser);</span>
-        
-<span class="fc" id="L63">                        response = new SuccessfulLoginResponse(resp);</span>
+                        // login details are correct
+<span class="fc" id="L68">                        User gotUser = user.get();</span>
+
+                        // put the user in the user session as an attribute
+<span class="fc" id="L71">                        session.setAttribute(&quot;user&quot;, gotUser);</span>
+<span class="fc" id="L72">                        response = new SuccessfulLoginResponse(resp);</span>
                     }
-<span class="fc" id="L65">                } catch (IllegalArgumentException e) {</span>
-<span class="fc" id="L66">                    response = new InvalidLoginDetailsResponse(resp);</span>
-<span class="fc" id="L67">                }</span>
+<span class="fc" id="L74">                } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L75">                    response = new InvalidLoginDetailsResponse(resp);</span>
+<span class="fc" id="L76">                }</span>
             }
-<span class="fc" id="L69">        } else {</span>
-<span class="fc" id="L70">            response = new InvalidParametersResponse(resp, &quot;username&quot;, &quot;password&quot;);</span>
+<span class="fc" id="L78">        } else {</span>
+<span class="fc" id="L79">            response = new InvalidParametersResponse(resp, &quot;username&quot;, &quot;password&quot;);</span>
         }
 
-<span class="fc" id="L73">        resp.getWriter().write(objectMapper.writeValueAsString(response));</span>
-<span class="fc" id="L74">    }</span>
+<span class="fc" id="L82">        resp.getWriter().write(objectMapper.writeValueAsString(response));</span>
+<span class="fc" id="L83">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

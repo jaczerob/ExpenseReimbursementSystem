@@ -35,7 +35,7 @@ import com.github.jaczerob.project1.web.responses.employee.request.SuccessfulSub
 <span class="nc" id="L35">    }</span>
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 <span class="nc" id="L39">        HttpSession session = req.getSession(true);</span>
 <span class="nc" id="L40">        Employee employee = (Employee) session.getAttribute(&quot;user&quot;);</span>
 <span class="nc" id="L41">        Response response = null;</span>
