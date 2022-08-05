@@ -24,7 +24,7 @@ public class ResolvedRequestsResponse extends Response {
      * @param requests The list of resolved requests
      */
 <span class="nc" id="L26">    public ResolvedRequestsResponse(HttpServletResponse resp, int employeeID, List&lt;ReimbursementRequest&gt; requests) {</span>
-<span class="nc" id="L27">        resp.setStatus(HttpServletResponse.SC_CREATED);</span>
+<span class="nc" id="L27">        resp.setStatus(HttpServletResponse.SC_OK);</span>
 <span class="nc" id="L28">        this.setMessage(String.format(&quot;Here are %d's resolved requests.&quot;, employeeID));</span>
 <span class="nc" id="L29">        this.resolvedRequests = requests;</span>
 <span class="nc" id="L30">    }</span>
@@ -36,7 +36,7 @@ public class ResolvedRequestsResponse extends Response {
      * @param requests The list of resolved requests
      */
 <span class="nc" id="L38">    public ResolvedRequestsResponse(HttpServletResponse resp, List&lt;ReimbursementRequest&gt; requests) {</span>
-<span class="nc" id="L39">        resp.setStatus(HttpServletResponse.SC_CREATED);</span>
+<span class="nc" id="L39">        resp.setStatus(HttpServletResponse.SC_OK);</span>
 <span class="nc" id="L40">        this.setMessage(&quot;Here are all employee resolved requests.&quot;);</span>
 <span class="nc" id="L41">        this.resolvedRequests = requests;</span>
 <span class="nc" id="L42">    }</span>

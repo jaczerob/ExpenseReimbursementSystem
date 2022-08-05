@@ -25,7 +25,7 @@ public class RegisterServletTest extends ServletTestHelper {
 
     @Test
     public void testRegisterSuccess() throws IllegalArgumentException, RecordAlreadyExistsException, ServletException, IOException, AddressException, MessagingException {
-        int wantStatus = HttpServletResponse.SC_OK;
+        int wantStatus = HttpServletResponse.SC_CREATED;
         
         Mockito.when(this.req.getParameter("email")).thenReturn("");
         Mockito.when(this.req.getParameter("username")).thenReturn("");

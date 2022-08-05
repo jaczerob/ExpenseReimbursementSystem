@@ -12,8 +12,12 @@ import javax.servlet.ServletContextListener;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Answers;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import com.github.jaczerob.project1.services.MailService;
@@ -21,21 +25,18 @@ import com.github.jaczerob.project1.services.ReimbursementRequestService;
 import com.github.jaczerob.project1.services.UserService;
 import com.github.jaczerob.project1.web.context.ContextListener;
 
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ContextListenerTest {
-    DataSource dataSource;
-    ServletContext context;
-    Connection conn;
-    ServletContextEvent event;
-    ServletContextListener listener;
+    @Mock(answer=Answers.CALLS_REAL_METHODS) private DataSource dataSource;
+    @Mock private ServletContext context;
+    @Mock private ServletContextEvent event;
+    @Mock private Connection conn;
 
-    HashMap<String, Object> attributes;
+    private ServletContextListener listener;
+    private HashMap<String, Object> attributes;
 
     @Before
     public void init() {
-        dataSource = Mockito.mock(DataSource.class, Mockito.CALLS_REAL_METHODS);
-        context = Mockito.mock(ServletContext.class);
-        event = Mockito.mock(ServletContextEvent.class);
-        conn = Mockito.mock(Connection.class);
         listener = new ContextListener();
         attributes = new HashMap<String, Object>();
     }

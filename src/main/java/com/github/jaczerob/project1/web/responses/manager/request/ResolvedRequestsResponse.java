@@ -11,7 +11,7 @@ import com.github.jaczerob.project1.web.responses.Response;
  * Represents a HTTP response representing an employee's resolved requests
  * @author Jacob
  * @since 0.13
- * @version 0.13
+ * @version 1.0
  */
 public class ResolvedRequestsResponse extends Response {
     private List<ReimbursementRequest> resolvedRequests;
@@ -24,7 +24,7 @@ public class ResolvedRequestsResponse extends Response {
      * @param requests The list of resolved requests
      */
     public ResolvedRequestsResponse(HttpServletResponse resp, int employeeID, List<ReimbursementRequest> requests) {
-        resp.setStatus(HttpServletResponse.SC_CREATED);
+        resp.setStatus(HttpServletResponse.SC_OK);
         this.setMessage(String.format("Here are %d's resolved requests.", employeeID));
         this.resolvedRequests = requests;
     }
@@ -36,7 +36,7 @@ public class ResolvedRequestsResponse extends Response {
      * @param requests The list of resolved requests
      */
     public ResolvedRequestsResponse(HttpServletResponse resp, List<ReimbursementRequest> requests) {
-        resp.setStatus(HttpServletResponse.SC_CREATED);
+        resp.setStatus(HttpServletResponse.SC_OK);
         this.setMessage("Here are all employee resolved requests.");
         this.resolvedRequests = requests;
     }

@@ -90,7 +90,7 @@ public class ReimbursementRequestRepository implements IRepository&lt;Reimbursem
 <span class="fc" id="L90">            Connection conn = this.dataSource.getConnection();</span>
 <span class="fc" id="L91">            PreparedStatement ps = conn.prepareStatement(sql)</span>
         ) {
-<span class="fc" id="L93">            ps.setBoolean(1, true);</span>
+<span class="fc" id="L93">            ps.setBoolean(1, false);</span>
 <span class="fc" id="L94">            ps.setBoolean(2, request.getApproved());</span>
 <span class="fc" id="L95">            ps.setInt(3, request.getApprovedBy());</span>
 <span class="fc" id="L96">            ps.setInt(4, request.getID());</span>

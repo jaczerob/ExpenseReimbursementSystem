@@ -13,11 +13,11 @@ import com.github.jaczerob.project1.web.responses.Response;
 public class SuccessfulRegistrationResponse extends Response {
     /**
      * Constructs a new SuccessfulRegistrationResponse
-     * Sets the status code to 200 (OK)
+     * Sets the status code to 201 (Created)
      * @param resp The raw HTTP response
      */
 <span class="fc" id="L19">    public SuccessfulRegistrationResponse(HttpServletResponse resp) {</span>
-<span class="fc" id="L20">        resp.setStatus(HttpServletResponse.SC_OK);</span>
+<span class="fc" id="L20">        resp.setStatus(HttpServletResponse.SC_CREATED);</span>
 <span class="fc" id="L21">        this.setMessage(&quot;You have successfully registered!&quot;);</span>
 <span class="fc" id="L22">    }</span>
 }

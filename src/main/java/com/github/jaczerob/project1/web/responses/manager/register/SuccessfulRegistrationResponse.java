@@ -8,16 +8,16 @@ import com.github.jaczerob.project1.web.responses.Response;
  * Represents a HTTP response if a user has successfully registered
  * @author Jacob
  * @since 0.9
- * @version 0.9
+ * @version 1.0
  */
 public class SuccessfulRegistrationResponse extends Response {
     /**
      * Constructs a new SuccessfulRegistrationResponse
-     * Sets the status code to 200 (OK)
+     * Sets the status code to 201 (Created)
      * @param resp The raw HTTP response
      */
     public SuccessfulRegistrationResponse(HttpServletResponse resp) {
-        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.setStatus(HttpServletResponse.SC_CREATED);
         this.setMessage("You have successfully registered!");
     }
 }

@@ -11,7 +11,7 @@ import com.github.jaczerob.project1.web.responses.Response;
  * Represents a HTTP response representing an employee's pending requests
  * @author Jacob
  * @since 0.13
- * @version 0.13
+ * @version 1.0
  */
 public class PendingRequestsResponse extends Response {
     private List<ReimbursementRequest> pendingRequests;
@@ -24,7 +24,7 @@ public class PendingRequestsResponse extends Response {
      * @param requests The list of pending requests
      */
     public PendingRequestsResponse(HttpServletResponse resp, int employeeID, List<ReimbursementRequest> requests) {
-        resp.setStatus(HttpServletResponse.SC_CREATED);
+        resp.setStatus(HttpServletResponse.SC_OK);
         this.setMessage(String.format("Here are %d's pending requests.", employeeID));
         this.pendingRequests = requests;
     }
@@ -36,7 +36,7 @@ public class PendingRequestsResponse extends Response {
      * @param requests The list of pending requests
      */
     public PendingRequestsResponse(HttpServletResponse resp, List<ReimbursementRequest> requests) {
-        resp.setStatus(HttpServletResponse.SC_CREATED);
+        resp.setStatus(HttpServletResponse.SC_OK);
         this.setMessage("Here are all employee pending requests.");
         this.pendingRequests = requests;
     }
